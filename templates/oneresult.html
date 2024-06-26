@@ -1,0 +1,88 @@
+{% include 'dashboardheader.html' %}
+
+ <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="link-danger border rounded-3 p-1 text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1 link-danger">Menu</i></a>
+                                                      <div class="page-header pt-3">
+                                                         <h2>My Results</h2>
+                                                      </div>
+                                                        {% if firstrow[9] %}
+                                                      <p class="lead">{{firstrow[9]}}</p>
+
+{% endif %}
+                                                      <hr>
+                                                      <div class="row">
+                                                          <div class="col-12">
+
+
+                                                
+
+
+
+
+                                                                       
+                                                                          <table id="data" class="table">
+                                                                            <thead>
+                                                                              <tr>
+                                                                                <th scope="col">Question</th>
+                                                                                <th scope="col">Correct Responses</th>
+                                                                                 <th scope="col">Incorrect Responses</th>
+                                                                                 <th scope="col">Percentage Correct</th>
+
+                                                                              </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                          {% for question in myresult %}
+
+                                                                          {% set percentage = (question[1] /(question[1] +question[2])) * 100%}
+
+                                                                              {% if percentage < 50 %}
+                                                            <tr><td>{{ question[0] }}</td><td>{{ question[1] }}</td><td>{{ question[2] }}</td><td class="text-danger">{{ "%.2f"|format(percentage|float) }}</td></tr>
+
+
+                                                                                                  {% elif percentage < 80 %}
+                                                            <tr><td>{{ question[0] }}</td><td>{{ question[1] }}</td><td>{{ question[2] }}</td><td class="text-warning">{{ "%.2f"|format(percentage|float) }}</td></tr>
+                                                                                                {% endif %}
+                                                                                               {% if percentage > 80 %}
+                                                              <tr><td>{{ question[0] }}</td><td>{{ question[1] }}</td><td>{{ question[2] }}</td><td class="text-success">{{ "%.2f"|format(percentage|float) }}</td></tr>
+                                                                                                                                        {% endif %}
+
+
+                                                                          {% endfor %}
+                                                                            </tbody>
+                                                                        </table>
+
+
+
+
+                                                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                          </div>
+                                                      </div>
+                                                  </main>
+                                              </div>
+                                          </div>
+
+
+                        
+                                {% include 'footer.html' %}
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    <!-- // $('#data').DataTable(); -->

@@ -1,0 +1,114 @@
+{% include 'header.html' %}
+
+
+<main>
+
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Games</h1>
+        <p class="lead text-body-secondary">Fun Games to use in your classroom that students want to play. Choose any <a class="link-danger text-decoration-none" href="{{ url_for('displayQuestionSets') }}">quiz</a> to use in any game.  Simply enter the quiz code at the start of the game.  Teachers with <a class="link-danger text-decoration-none" href="{{ url_for('pricing') }}">premium</a> can view results at any time.</p>
+        <!-- <p>
+          <a class="btn btn-warning btn-lg px-4 gap-3" href="{{ url_for('displayQuestionSets') }}" >Quizzes</a>
+         
+        </p> -->
+        <h3>More Games Coming Soon!</h3>
+        <h5 class="text-danger">At This Time Our Games Are NOT Playable On Phones Or Tablets</h5>
+      </div>
+    </div>
+  </section>
+
+  <!-- <div class="album py-5 bg-body-tertiary"> -->
+        <div class="album py-5">
+
+      <div class="container">
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+
+<!-- new card -->
+        
+          <div class="col">
+          <div class="card shadow-sm" style="width: 18rem;">
+            <img src="{{ url_for('static', filename='assets/arthur.png') }}" class="card-img-top" alt="Arthur Game Image">
+            <div class="card-body">
+              <h5 class="card-title">Arthur the Greedy</h5>
+              <p class="card-text">Collect as many coins as possible and try to survive in this fun platform game.</p>
+                 <!-- <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('arthur',name='index.html') }}';">Play</button> -->
+              <div class="d-grid gap-2 d-lg-flex justify-content-lg-center">
+                <a class="btn btn-warning btn-lg px-4 gap-3" href="{{ url_for('arthur') }}">Play</a>
+              </div>
+            </div>
+          </div>
+              </div>
+          <!-- end new card -->
+
+
+        <!-- new card -->
+
+        <div class="col">
+        <div class="card shadow-sm" style="width: 18rem;">
+          <img src="{{ url_for('static', filename='assets/cannon.png') }}" class="card-img-top" alt="Arthur Game Image">
+          <div class="card-body">
+            <h5 class="card-title">Cannon Ball Catch</h5>
+            <p class="card-text">Launch The Cannon Balls Into The Targets!</p>
+               <!-- <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('arthur',name='index.html') }}';">Play</button> -->
+            <div class="d-grid gap-2 d-lg-flex justify-content-lg-center">
+              <a class="btn btn-warning btn-lg px-4 gap-3" href="{{ url_for('cannon') }}">Play</a>
+            </div>
+          </div>
+        </div>
+            </div>
+        <!-- end new card -->
+
+
+        <!-- new card -->
+
+        <div class="col">
+        <div class="card shadow-sm" style="width: 18rem;">
+          <img src="{{ url_for('static', filename='assets/memory.png') }}" class="card-img-top" alt="Arthur Game Image">
+          <div class="card-body">
+            <h5 class="card-title">Memory Madness</h5>
+            <p class="card-text">Match The Images In The Fewest Moves</p>
+               <!-- <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('arthur',name='index.html') }}';">Play</button> -->
+            <div class="d-grid gap-2 d-lg-flex justify-content-lg-center">
+              <a class="btn btn-warning btn-lg px-4 gap-3" href="{{ url_for('memory') }}">Play</a>
+            </div>
+          </div>
+        </div>
+            </div>
+        <!-- end new card -->
+
+
+        
+
+
+
+        <!-- new card -->
+        <!-- <div class="col">
+        <div class="card shadow-sm" style="width: 18rem;">
+          <img src="{{ url_for('static', filename='assets/arthur.png') }}" class="card-img-top" alt="Arthur Game Image">
+          <div class="card-body">
+            <h5 class="card-title">Outpost Assault</h5>
+            <p class="card-text">Classic Tower Defense.</p> -->
+               <!-- <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('arthur',name='index.html') }}';">Play</button> -->
+
+              <!-- <a class="btn btn-warning btn-lg px-4 gap-3" href="{{ url_for('outpost') }}">Play</a> -->
+
+          </div>
+        </div>
+            </div>
+        <!-- end new card -->
+
+
+        
+        
+          
+          
+          
+      </div>
+    </div>
+  </div>
+
+</main>
+

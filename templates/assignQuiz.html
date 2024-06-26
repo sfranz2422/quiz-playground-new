@@ -1,0 +1,26 @@
+{% include 'header.html' %}
+<!-- Content section-->
+     
+       <main class="justify-content-center align-items-center text-center text-large">
+
+
+         <h1 class="text-large">Go To <span class="text-danger">quizplayground.com/games</span></h1>
+        <br>     <h1 class="text-large">Pick A Game</h1>
+         <br>
+<h1 class="text-large">Enter <span class="text-danger">{{quizid}}</span>  In The Quiz ID Field</h1>
+
+         {% if subscribed == True %}
+         <br>
+         <h1 class="text-large">Enter <span class="text-danger">{{teacherId}}</span> In The Teacher ID Field</h1>
+        {% endif %}
+
+
+
+
+
+         
+       </main>
+ 
+
+
+{% include 'footer.html' %}

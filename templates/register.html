@@ -1,0 +1,100 @@
+{% include 'header.html' %}
+
+<!-- Content section-->
+<section class="py-5">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+
+<!--  register -->
+              <!-- <link
+                 rel="stylesheet"
+                 href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+               />
+               <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script> -->
+
+
+              
+                <main class="form-signin w-100 m-auto">
+                  <div class="justify-content-center align-items-center text-center">
+                  <form method="POST" action="{{ url_for('register') }}" autocomplete="off">
+                    <h1 class="h3 mb-3 fw-normal">Create A <a class="link-danger text-decoration-none" href="{{ url_for('pricing') }}">Premium</a> Account</h1>
+
+
+                    <div class="form-floating">
+                      <input type="text" class="form-control mb-2" id="fname" placeholder="name@example.com" name="fname" required>
+                      <label for="fname">First Name</label>
+                    </div>
+
+                    <div class="form-floating">
+                      <input type="text" class="form-control mb-2" id="lname" placeholder="name@example.com" name="lname" required>
+                      <label for="lname">Last Name</label>
+                    </div>
+
+                    <div class="form-floating">
+                      <input type="text" class="form-control mb-2" id="school" placeholder="name@example.com" name="school" required>
+                      <label for="school">School District</label>
+                    </div>
+                    
+                    
+                    <div class="form-floating">
+                      <input type="email" class="form-control mb-2" id="email" placeholder="name@example.com" name="email" required>
+                      <label for="email">Email address</label>
+                    </div>
+                    <div class="form-floating">
+                      <input type="password" class="form-control mb-2" id="password" placeholder="Password" name="password" required>
+                      <label for="password">Password</label>
+                    </div>
+                    <div class="form-floating">
+                      <input type="password" class="form-control mb-2" id="passwordrepeat" placeholder="Password" name="passwordrepeat" required>
+                      <label for="passwordrepeat">Retype Password</label>
+                    </div>
+                    <div class="form-floating">
+
+                       
+                        
+                        
+                            <input type="tel" class="form-control mb-2" id="phone" placeholder="555-555-5555" name="phone" required>
+                          <label for="phone">Phone That Can Receive Texts For Account Security</label>
+                   
+                       </div>
+                      
+                 
+                    
+                    <input type="hidden" name="token" value="{{ token }}">
+                    
+                    <button class="btn btn-warning btn-lg px-4 gap-3" type="submit">Proceed To Purchase</button>
+
+                     <!-- <button type="submit" class="btn btn-warning btn-lg w-100 py-2" onclick="document.getElementById('loader').style.display='block';">Register</button> -->
+
+                    
+                    <!-- <div id="loader"></div> -->
+                    <p>
+                      <small class="text-danger">{{ msg }}</small>
+                       <div class="alert alert-info" style="display: none;"></div>
+                    </p>
+                    
+                   
+                  </form>
+                  </div>
+                </main>
+
+ 
+
+
+
+                
+                 </div>
+            </div>
+        </div>
+</section>
+
+ <!-- <script>
+   const phoneInputField = document.querySelector("#phone");
+   const phoneInput = window.intlTelInput(phoneInputField, {
+     utilsScript:
+       "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+   });
+ </script> -->
+
+{% include 'footer.html' %}

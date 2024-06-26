@@ -1,0 +1,78 @@
+{% include 'dashboardheader.html' %}
+ <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="link-danger border rounded-3 p-1 text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1 link-danger">Menu</i></a>
+            <div class="page-header pt-3">
+              <h2>My Results</h2>
+            </div>
+            <p class="lead"></p>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+
+
+
+
+                  <table>
+                    <table id="data" class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Quiz ID</th>
+                          <th scope="col">Title</th>
+                           <th scope="col"></th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                    {% for quiz in myresult %}
+
+
+                       
+
+                    <tr><td>{{ quiz[0] }}</td><td>{{ quiz[1] }}</td>
+                      
+      
+
+
+                      <td>
+
+                        <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('oneresult', quizid = quiz[0]) }}';">View Results</button>
+                        
+                      </td>
+                      <td>
+
+                        <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='{{ url_for('deleteResult',quizid=quiz[0]) }}';">Delete Results</button>
+
+                      </td>
+                      
+                    
+                    </tr>
+                    {% endfor %}
+                      </tbody>
+                  </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+
+
+{% include 'footer.html' %}

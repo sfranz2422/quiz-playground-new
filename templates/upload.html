@@ -1,0 +1,116 @@
+{% include 'dashboardheader.html' %}
+ <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="link-danger border rounded-3 p-1 text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1 link-danger">Menu</i></a>
+            <div class="page-header pt-3">
+                  <h2>Upload A Quiz</h2>
+            </div>
+            <p class="lead"></p>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+
+
+
+
+                  
+                                        <h5>
+                                          <small class="text-muted"><a href="{{ url_for('download_file') }}">Download the Quiz template.</a></small>
+                                        </h5>
+                                        <form class="row g-3" method="POST" action="{{url_for('upload_file')}}" enctype="multipart/form-data">
+                                          <div class="col-md-4">
+
+                                              <label for="file">Upload a csv file:</label>
+                                              <input type="file" id="file"  class="form-control" name="file" required>
+                                          </div>
+
+                                           <div class="col-md-4">
+                                             <label for="subject">Choose A Subject</label>
+                                          <select id="subject" name="subject" class="form-select" aria-label="Subject" required>
+                                            <option selected>Subject</option>
+                                            <option value="Arts">Arts</option>
+                                            <option value="Biology">Biology</option>
+                                            <option value="Business">Business</option>
+                                            <option value="Chemistry">Chemistry</option>
+                                            <option value="Computers">Computers</option>
+                                             <option value="Foreign Language">Foreign Language</option>
+                                            <option value="Fun">Fun</option>
+                                            <option value="History">History</option>
+                                        <option value="Instructional Technology">Instructional Technology</option>
+                                            <option value="Language Arts">Language Arts</option>
+                                            <option value="Mathematics">Mathematics</option>
+                                            <option value="Other">Other</option>
+                                            <option value="Physical Education">Physical Education</option>
+                                            <option value="Physics">Physics</option>
+                                            <option value="Religious Studies">Religious Studies</option>
+                                            <option value="Science">Science</option>
+                                            <option value="Social Studies">Social Studies</option>
+                                            <option value="Special Education">Special Education</option>
+                                          </select>
+                                           </div>
+
+                                          
+                                              <div class="col-12">
+                                            <label for="validationDefault01" class="form-label">Quiz Title</label>
+                                            <input type="text" class="form-control" id="validationDefault01" value="" name="QuestionSetTitle" required>
+                                          </div>
+                                            <div class="col-12">
+                                            <label for="validationTextarea" class="form-label">Quiz Description</label>
+                                            <textarea class="form-control" id="validationTextarea" placeholder="Enter a Description for the quiz" name="QuestionSetDescription" required></textarea>
+
+                                          </div>
+                                            <div class="col-12">
+                                    <div class="form-check">
+
+
+                    <input class="form-check-input" type="checkbox" value="checked" id="questionSetPrivate" name="questionSetPrivate">
+
+                                            <label class="form-check-label" for="questionSetPrivate">
+                                                    Private
+                                                  </label>
+
+                                                 </div>
+
+                                             <div class="col-12">     
+
+                                                 <input type="hidden" name="teacherId" value="{{ teacherId }}">
+                                                   <input type="hidden" name="token" value="{{ token }}">
+                                                 <input class="btn btn-warning" type="submit" value="Upload CSV">
+
+                                        </form>
+
+
+                                         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+
+
+        <!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <!-- Core theme JS-->
+
+        <script src="{{ url_for('static', filename='js/scripts.js')}}"></script>
+    </body>
+</html>

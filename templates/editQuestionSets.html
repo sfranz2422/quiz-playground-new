@@ -1,0 +1,53 @@
+{% include 'header.html' %}
+        <!-- Content section-->
+        <section class="py-5">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+
+<!-- form 2 -->
+                        <h2>Quizzes</h2>
+
+                        <h5>
+                          <small class="text-muted">Use any of these question sets in any game.</small>
+                        </h5>
+
+             
+
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Question Set ID</th>
+                              <th scope="col">Title</th>
+                              <th scope="col">Description</th>
+                            
+                            </tr>
+                          </thead>
+                          <tbody>
+
+
+
+
+                            
+                             {% for quiz in result %}
+                            <tr>
+                              <th scope="row"> <a class="link-danger text-decoration-none" href="{{ url_for('displayOneQuestionSet', id=quiz[0] ) }}">{{ quiz[0] }}</a></th>
+                              <td>{{ quiz[1] }}</td>
+                              <td>{{ quiz[2] }}</td>
+                             
+                            </tr>
+                       {% endfor %}
+                          </tbody>
+                        </table>
+
+
+                       
+                        
+
+                         </div>
+
+                    </div>
+                </div>
+
+        </section>
+{% include 'footer.html' %}

@@ -1,0 +1,98 @@
+{% if subscribed %}
+{% include 'dashboardheader.html' %}
+{% else %}
+{% include 'header.html' %}
+        <!-- Content section-->
+{% endif %}
+
+{% if subscribed %}
+
+
+{% else %}
+        <section class="py-5">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+{% endif %}
+
+
+                <h2>Question #{{ q[2] }}</h2>
+
+
+              <br>
+<form action="{{ url_for('editSubmit') }}" method='post'>
+
+              <hr>
+<br>  <textarea class="form-control" id="validationTextarea" placeholder="Question" name="questionText" required>{{ q[3] }}</textarea>
+
+<table>
+<tr>
+    <td>A. <textarea class="form-control" id="validationTextarea" placeholder="Answer 1" name="answer1" required>{{ q[4] }}</textarea></td>
+    <td>B. <textarea class="form-control" id="validationTextarea" placeholder="Answer 2" name="answer2" required>{{ q[5] }}</textarea></td>
+</tr>
+<tr>
+    {% if q[6] == '' %}
+    {% set ans3 = 'empty' %}
+    <td>C. <textarea class="form-control" id="validationTextarea" placeholder="Answer 3" name="answer3" required>{{ ans3 }}</textarea>
+{% else %}
+    <td>C. <textarea class="form-control" id="validationTextarea" placeholder="Answer 3" name="answer3" required>{{ q[6] }}</textarea>
+          
+        {% endif %}
+    </td>
+
+    
+    {% if q[7] == '' %}
+    {% set ans4 = 'empty' %}
+     <td>D. <textarea class="form-control" id="validationTextarea" placeholder="Answer 4" name="answer4" required>{{ ans4 }}</textarea>
+   {% else %}
+    <td>D. <textarea class="form-control" id="validationTextarea" placeholder="Answer 4" name="answer4" required>{{ q[7] }}</textarea>
+         {% endif %}
+    </td>
+</tr>
+</table>
+
+
+              {% if q[8] == '1' %}
+              {% set answer = 'A' %}
+              Correct Answer:  <input class="form-control" type="text" name="correctAnswer" pattern="[ABCD]" value= "{{ answer }}" required>
+              {% endif %}
+              {% if q[8] == '2' %}
+              {% set answer = 'B' %}
+              Correct Answer:  <input class="form-control" type="text" name="correctAnswer" pattern="[ABCD]" value= "{{ answer }}" required>
+              {% endif %}
+              {% if q[8] == '3' %}
+              {% set answer = 'C' %}
+              Correct Answer:  <input class="form-control" type="text" name="correctAnswer" pattern="[ABCD]" value= "{{ answer }}" required>
+              {% endif %}
+              {% if q[8] == '4' %}
+              {% set answer = 'D' %}
+              Correct Answer:  <input class="form-control" type="text" name="correctAnswer" pattern="[ABCD]" value= "{{ answer }}" required>
+              {% endif %}
+
+<br>
+
+              <br>
+<input type="hidden" value="{{ q[0] }}" name="id">
+    <input type="hidden" value="{{ q[2] }}" name="questionNumber">
+     <input type="hidden" value="{{ q[1] }}" name="quizId">
+      <input type="hidden" value="{{ q[9] }}" name="questionSetTitle">
+      <input type="hidden" value="{{ q[10] }}" name="questionSetDescription">
+      <input type="hidden" value="{{ q[11] }}" name="questionSetPrivate">
+      <input type="hidden" value="{{ q[12] }}" name="teacherId">
+
+    
+     <input class="btn btn-warning btn-lg px-4 gap-3" type="submit" value="Submit Changes">
+    <a class="btn btn-warning btn-lg px-4 gap-3" href="{{ url_for('displayOneQuestionSet', id=q[1]) }}">Cancel</a>
+</form>
+                  {% if subscribed %}
+
+
+                      {% else %}
+                                      </div>
+
+                                  </div>
+                              </div>
+
+                      </section>
+
+                      {% endif %}

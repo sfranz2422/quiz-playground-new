@@ -1,0 +1,85 @@
+{% include 'header.html' %}
+
+
+        <main>
+          <div class="row row-cols-1 row-cols-md-5 justify-content-center align-items-center text-center">
+            <div class="col">
+              <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-4">
+                  <h4 class="my-0 fw-normal">Free</h4>
+                </div>
+                <div class="card-body">
+                  <h1 class="card-title pricing-card-title">$0<small class="text-body-secondary fw-light">/mo</small></h1>
+                  <ul class="list-unstyled mt-3 mb-4">
+                     <li>Play Any Game For Free</li>
+                    <li>Use Any Public Quiz</li>
+                    <li>No Quiz uploads</li>
+                    <li>No Quiz Editing</li>
+                    <li>No Reporting</li>
+                  </ul>
+                   <button type="button" class="btn btn-warning btn-lg px-4 gap-3">Current</button>  
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-4">
+                  <h4 class="my-0 fw-normal">Premium</h4>
+                </div>
+                <div class="card-body">
+                  <h1 class="card-title pricing-card-title">$5<small class="text-body-secondary fw-light">/mo</small></h1>
+                  <ul class="list-unstyled mt-3 mb-4">
+                     <li>Play Any Game For Free</li>
+                    <li>Use Any Public Quiz</li>
+                    <li>Upload Your Own Quizzes</li>
+                    <li>Copy and Edit Public Quizzes</li>
+                     <li>Detailed Question Reporting On All Quizzes</li>
+                  </ul>
+
+
+                  <div class="d-grid gap-2 d-lg-flex justify-content-lg-center">
+                     <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('register') }}';">Purchase</button>  
+                    <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('faq') }}';">Features</button>    
+                  </div>
+
+
+                  
+
+           
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-4">
+                  <h4 class="my-0 fw-normal">School</h4>
+                </div>
+                <div class="card-body">
+                  <h1 class="card-title pricing-card-title">Varies<small class="text-body-secondary fw-light"></small></h1>
+                  <ul class="list-unstyled mt-3 mb-4">
+                     <li>Play Any Game For Free</li>
+                    <li>Use Any Public Quiz</li>
+                    <li>Upload Your Own Quizzes</li>
+                     <li>Create Your Own Quizzes</li>
+                    <li>Copy and Edit Public Quizzes</li>
+                    <li>Detailed Question Reporting On All Quizzes</li>
+                  </ul>
+                   <button type="button" class="btn btn-warning btn-lg px-4 gap-3">Contact Us</button>  
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+          
+        </main>
+          
+          
+      </div>
+    </div>
+  </div>
+
+</main>
+

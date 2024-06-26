@@ -1,0 +1,88 @@
+{% include 'dashboardheader.html' %}
+ <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="link-danger border rounded-3 p-1 text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1 link-danger">Menu</i></a>
+            <div class="page-header pt-3">
+              <h2>My Quizzes</h2>
+            </div>
+            <p class="lead"></p>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+
+
+
+                  
+
+
+                    <h5>
+                      <small class="text-muted">Use any of these quizzes in any game.</small>
+                    </h5>
+
+     <p>           <a class="link-danger text-decoration-none" href="{{ url_for('addNewQuiz') }}">New Quiz</a></p>
+
+                    <table id="data" class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col" class="col-2">Quiz ID</th>
+                          <th scope="col">Title</th>
+                          <th scope="col">Description</th>
+                          <th scope="col"></th>
+                           <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <script>
+                            function confirmDelete(elem) {
+                                if(confirm('Are you sure you want to delete this quiz') == true) {
+                                    //elem = 1;
+                                    alert("Deleted" + elem); 
+                                    document.getElementById("userInput").value = "True";
+                                }
+                                else { 
+                                     document.getElementById("userInput").value = "False";
+                                     return 0;
+                                }          
+                            }
+                        </script>
+
+
+
+                         {% for quiz in result %}
+                        <tr>
+                          <th scope="row"> <a class="link-danger text-decoration-none" href="{{ url_for('displayOneQuestionSet', id=quiz[0] ) }}">{{ quiz[0] }}</a></th>
+                          <td>{{ quiz[1] }}</td>
+                          <td class="text-wrap">{{ quiz[2] }}</td>
+                          <td> <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('assignQuiz', quizid = quiz[0]) }}';">Assign Quiz</button>  </td>
+
+<td>
+                          <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='{{ url_for('deleteQuiz', quizid = quiz[0]) }}';">Delete Quiz</button>
+</td>
+                        </tr>
+                   {% endfor %}
+                      </tbody>
+                    </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+
+{% include 'footer.html' %}

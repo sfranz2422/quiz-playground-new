@@ -1,0 +1,16 @@
+{% include 'header.html' %}
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto px-0">
+            <div id="sidebar" class="collapse collapse-horizontal show border-end">
+                <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
+                    <a href="{{ url_for('account') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-bootstrap"></i> <span>Account</span> </a>
+                    <a href="{{ url_for('myresults') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-film"></i> <span>My Results</span></a>
+                    <a href="{{ url_for('displayPrivateQuestionSets') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-heart"></i> <span>My Quizzes</span></a>
+                     <a href="{{ url_for('addNewQuiz') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-heart"></i> <span>Create Quiz</span></a>
+                    <a href="{{ url_for('upload') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-bricks"></i> <span>Upload</span></a>
+
+                </div>
+            </div>
+        </div>
+        <main class="col ps-md-2 pt-2">

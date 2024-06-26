@@ -1,0 +1,44 @@
+{% include 'header.html' %}
+
+<!-- Content section-->
+<section class="py-5">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+
+<!--  login -->
+
+                <main class="form-signin w-100 m-auto">
+                  <form method="POST" action="{{ url_for('twofactor') }}">
+                    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="code" placeholder="Code" name="code">
+                      <label for="floatingInput">Enter the Code Sent To The Phone Number Ending in {{ phone[-4:] }} </label>
+                    </div>
+ 
+                    <input type="hidden" name="token" value="{{ token }}">
+                    
+        
+                    <button type="submit" class="btn btn-warning btn-lg px-4 gap-3">Submit</button>
+
+                    
+                    <p>
+                      <small class="text-danger">{{ msg }}</small>
+                    </p>
+                    
+                   
+                  </form>
+                </main>
+
+ 
+
+
+
+                
+                 </div>
+            </div>
+        </div>
+</section>
+
+{% include 'footer.html' %}

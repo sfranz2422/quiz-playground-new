@@ -1,0 +1,115 @@
+{% if subscribed %}
+{% include 'dashboardheader.html' %}
+ <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="link-danger border rounded-3 p-1 text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1 link-danger">Menu</i></a>
+
+{% else %}
+{% include 'header.html' %}
+       
+{% endif %}
+
+{% if subscribed %}
+
+
+{% else %}
+        <section class="py-5">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+{% endif %}
+<!-- form 2 -->
+
+
+
+                      
+                      
+                        <h2>{{ result[0][9] }}</h2>
+                       <h4>{{ result[0][10] }}</h4>
+                      <h5>
+                        <small class="text-muted">Quiz ID<a class="link-danger text-decoration-none" href="{{ url_for('assignQuiz', quizid=result[0][1]) }}" > {{ result[0][1]}}</a></small>
+
+                      </h5>
+                        {% if subscribed and result[0][12] == teacherId: %}
+                     <small> <a class="link-danger text-decoration-none" href="{{ url_for('editTitleForm', quizid=result[0][1])}}">Edit Title/Description</a></small>
+                     <br>
+                       {% if result[0][11] == '1' %}
+                        <small class="text-muted">Private<a class="link-danger text-decoration-none" href="{{ url_for('togglePrivacyOff', quizId=result[0][1]) }}"> Make Public </a></small>
+                          {% else %}
+                         
+                    <small class="text-muted">Public<a class="link-danger text-decoration-none" href="{{ url_for('togglePrivacyOn', quizId=result[0][1]) }}"> Make Private </a></small>
+
+                         {% endif %}
+                       
+                       {% elif subscribed and result[0][12] != teacherId: %}
+  
+                      <a class="link-danger text-decoration-none" href="{{ url_for('copy', quizid=result[0][1]) }}">Copy And Edit Quiz</a>
+                      {% endif %}
+
+
+
+                      {% if subscribed and result[0][12] == teacherId: %}
+                <br>
+                      <br>
+  <a class="link-danger text-decoration-none" href="{{ url_for('addQuestion', set=result[0][1], teacherid=result[0][12]) }}">Add Question</a>
+                      {% endif %}
+
+                      
+                      <br>
+
+{% for question in result %}
+                      <hr>
+{{ question[3] }}
+<table>
+<tr><td>A. {{ question[4] }}</td><td>B. {{ question[5] }}</td></tr>
+  <tr><td>C. {{ question[6] }}</td><td>D. {{ question[7] }}</td></tr>
+</table>
+
+                      {% if subscribed %}  
+                      {% if question[8] == '1' %}
+                      {% set answer = 'A' %}
+                      Correct Answer:  {{ answer }}
+                      {% endif %}
+                      {% if question[8] == '2' %}
+                      {% set answer = 'B' %}
+                      Correct Answer:  {{ answer }}
+                      {% endif %}
+                      {% if question[8] == '3' %}
+                      {% set answer = 'C' %}
+                      Correct Answer:  {{ answer }}
+                      {% endif %}
+                      {% if question[8] == '4' %}
+                      {% set answer = 'D' %}
+                      Correct Answer:  {{ answer }}
+                      {% endif %}
+                       {% endif %}
+
+<br>
+
+
+                      
+                     {% if subscribed and question[12] == teacherId: %}  
+                     <a class="link-danger text-decoration-none" href="{{ url_for('edit_one_question', set=result[0][1] ,id=question[0]) }}">Edit Question</a>
+                      {% endif %}
+                  
+
+
+
+                      {% if subscribed and question[12] == teacherId and result|length > 1: %}
+
+
+                      <a class="link-danger text-decoration-none" style="margin-left:60px;"href="{{ url_for('deleteQuestion', set=result[0][1] ,id=question[0], teacherId = result[0][12]) }}">Delete Question</a>
+                      {% endif %}
+                      
+{% endfor %}
+
+
+                                      </div>
+
+                                  </div>
+                              </div>
+
+                      </section>
+
+               
+
+
+ 

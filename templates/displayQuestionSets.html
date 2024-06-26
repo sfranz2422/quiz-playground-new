@@ -1,0 +1,57 @@
+{% include 'header.html' %}
+        <!-- Content section-->
+        <section class="py-5">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+
+<!-- form 2 -->
+                        <h2>Public Quizzes</h2>
+
+                        <h5>
+                          <small class="text-muted">Use any of these quizzes in any <a class="link-danger text-decoration-none" href="{{ url_for('games') }}">game</a>.</small>
+                          
+                        </h5>
+                      <h5><a class="link-danger text-decoration-none" href="{{ url_for('pricing') }}">Only Premium Subscribers Can View Quiz Results</a></h5>
+
+             
+
+                        <table id="data" class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col" class="col-3">Quiz ID</th>
+                              <th scope="col">Title</th>
+                              <th scope="col">Description</th>
+                              <th scope="col">Subject</th>
+                              <th scope="col" class="col-2"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+
+
+
+
+                            
+                             {% for quiz in result %}
+                            <tr>
+                              <th scope="row"> <a class="link-danger text-decoration-none" href="{{ url_for('displayOneQuestionSet', id=quiz[0]) }}">{{ quiz[0] }}</a></th>
+                              <td>{{ quiz[1] }}</td>
+                              <td>{{ quiz[2] }}</td>
+                              <td>{{ quiz[3] }}</td>
+                               <td> <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('assignQuiz', quizid = quiz[0]) }}';">Assign Quiz</button>  </td>
+                            </tr>
+                       {% endfor %}
+                          </tbody>
+                        </table>
+
+
+                       
+                        
+
+                         </div>
+
+                    </div>
+                </div>
+
+        </section>
+{% include 'footer.html' %}

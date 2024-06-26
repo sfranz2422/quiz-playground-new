@@ -1,0 +1,18 @@
+{% include 'header.html' %}
+        <!-- Content section-->
+
+
+      <div class="px-4 py-5 my-5 text-center">
+        <img class="d-block mx-auto mb-4 home-image" src="{{ url_for('static',filename='assets/logo3.png') }}" alt="Quiz Playground Logo">
+        
+        <div class="col-lg-6 mx-auto">
+          <p class="lead mb-4">Quiz Playground is an exciting way to deliver formative assessment. It aims to match games with education to create the ultimate learning experience!</p>
+          
+          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('games') }}';">Games</button>
+           <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('displayQuestionSets') }}';">Quizzes</button>          
+          </div>
+        </div>
+      </div>
+      
+{% include 'footer.html' %}

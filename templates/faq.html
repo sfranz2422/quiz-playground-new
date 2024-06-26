@@ -1,0 +1,208 @@
+{% include 'header.html' %}
+
+
+<main class="w-75 m-auto">
+
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">How Does Quiz Playground Work?</h1>
+        <p class="lead text-body-secondary">Quiz Playground aims to provide fun and interactive formative assessment through games.  In our platform the students are able to play any game on the site leaving the teacher to focus on the student data.</p>
+       
+        <!-- mailer lite form -->
+
+        <button class="ml-onclick-form btn btn-warning" onclick="ml('show', 'uKEGkA', true)">Sign Up For Our Newsletter</button>
+
+        <!-- mailer lite form -->
+      </div>
+    </div>
+  </section>
+  <div class="accordion bg-warning" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          The student can choose any game?  How does that work?
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse show show" aria-labelledby="headingOne" >
+        <div class="accordion-body">
+          All of our games are setup to display any of our quizzes or you can use your <a class="link-danger text-decoration-none" href="{{ url_for('pricing') }}">own</a>.  The student can choose any <a>game</a> and simply enter the Quiz ID and Teacher ID to start the game.  That's it!  All the quiz results will be sent to the teacher dashboard in the results section.  
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingTwo">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          What if I don't have a teacher account?  Can my students still play a game?
+        </button>
+      </h2>
+      <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" >
+        <div class="accordion-body">
+          Yes! Students can play any game on the site for free and there is never any registration required for students.  The students simply enter the Quiz ID to begin the game.  Students can also click the random quiz button at the start of the game to play the game with a random quiz from the public quiz library.  
+          <br>
+          If the teacher has a <a class="link-danger text-decoration-none" href="{{ url_for('pricing') }}">premium</a> acccount the students will also enter the teacher ID at the beginning of the game so assessment results are reported to the teacher.
+          
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingThree">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          What is included in the premium membership?
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree" >
+        <div class="accordion-body">
+         The premium membership unlocks the full potential of Quiz Playground.  Teachers are assigned a Teacher ID which enables the viewing of the student results.  In addition, the premium membership allows teachers to upload quizzes as a csv file or create quizzes from scratch.  Also, with premium, teachers can copy and edit any of the public quizzes posted by other teachers. 
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingFour">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+          How much is the premium membership?
+        </button>
+      </h2>
+      <div id="collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingThree" >
+        <div class="accordion-body">
+         The premiumm membership is $5.00 / monthly and can be cancelled at at time.  We use Stripe to handle all of our billing so you can be assured your payment information is handled securely.
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingFive">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseThree">
+          Do students need to create an account?
+        </button>
+      </h2>
+      <div id="collapseFive" class="accordion-collapse collapse show" aria-labelledby="headingThree" >
+        <div class="accordion-body">
+         Students are never required to create an account.  Students can play any game on the site for free without an account.  If a teacher assigns a quiz to a class, students only have to include the Teacher ID to view results in the teacher dashboard.   
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingSix">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseThree">
+          How do I view my students' results?
+        </button>
+      </h2>
+      <div id="collapseSix" class="accordion-collapse collapse show" aria-labelledby="headingThree" >
+        <div class="accordion-body">
+After registering for a premium membership you will receive your Teacher ID and access to your dashboard.  Within the dashboard you can make changes to your membership, view quiz results, view and edit your private quizzes, create a new quiz or upload a csv quiz using the provided template.  Premium members can also copy and edit any of the public quizzes made by other teachers. 
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingSeven">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+         What kind of games do you have?
+        </button>
+      </h2>
+      <div id="collapseSeven" class="accordion-collapse collapse show" aria-labelledby="headingSeven" >
+        <div class="accordion-body">
+    We try to add a new game monthly.  Currently we have a platform game and a cannon ball shooter game but we have plans for a 3D infinite runner and multiplayer games.  
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingEight">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+         Who do I contact if I have questions?
+        </button>
+      </h2>
+      <div id="collapseEight" class="accordion-collapse collapse show" aria-labelledby="headingEight" >
+        <div class="accordion-body">
+    We can be reached at <a class="link-danger text-decoration-none" href="mailto:support@quizplayground.com">support@quizplayground.com</a>.  We will respond to any email within 24 hours.  
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingNine">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+         Do you offer mult-teacher discounts.  
+        </button>
+      </h2>
+      <div id="collapseNine" class="accordion-collapse collapse show" aria-labelledby="headingNine" >
+        <div class="accordion-body">
+    Yes we do please contact us at <a class="link-danger text-decoration-none" href="mailto:support@quizplayground.com">support@quizplayground.com</a> for details. 
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingTen">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+         How do I assign a quiz?
+        </button>
+      </h2>
+      <div id="collapseTen" class="accordion-collapse collapse show" aria-labelledby="headingTen" >
+        <div class="accordion-body">
+    Teachers can use the assign button in the teacher dashboard to present the Quiz ID and Teacher ID for the students but it's not required.  As long as students type in the appropriate Quiz ID and Teacher ID the teacher will see the results in the teacher dashboard.
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingEleven">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+        Do I have to enter dashes in the quiz code at the beginning of the game?
+        </button>
+      </h2>
+      <div id="collapseEleven" class="accordion-collapse collapse show" aria-labelledby="headingEleven" >
+        <div class="accordion-body">
+  No you do not have to enter dashes.  But if you want to that's ok too.  The game will start correctly either way. 
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingTwelve">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
+       How often do the questions appear in the games?
+        </button>
+      </h2>
+      <div id="collapseTwelve" class="accordion-collapse collapse show" aria-labelledby="headingTwelve" >
+        <div class="accordion-body">
+The frequency of the questions vary.  For example in the platform games, an "endurance" meter is filled to 100% if the student answers correctly and it fills to only 30% on an incorrect response.  In all games a correct answer provides more of a reward than an incorrect answer.   
+        </div>
+      </div>
+    </div>
+    
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingThirteen">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen">
+      Are the quiz questions scrambled in the games?
+        </button>
+      </h2>
+      <div id="collapseThirteen" class="accordion-collapse collapse show" aria-labelledby="headingThirteen" >
+        <div class="accordion-body">
+Yes, all questions and multiple choice answers are scrambled in the games.   
+        </div>
+      </div>
+    </div>
+
+
+
+    
+
+    
+  </div>
+
+</main>
+
+  <!-- Footer-->
+ <!-- <p class="text-center text-body-secondary">© 2024 Quiz Playground</p> -->
+        <!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <!-- Core theme JS-->
+
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>  
+<!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script> -->
+<script>
+  $(document).ready(function () {
+new DataTable('#data');
+
+});
+</script>
+        <script src="{{ url_for('static', filename='js/scripts.js')}}"></script>
+    </body>
+</html>
