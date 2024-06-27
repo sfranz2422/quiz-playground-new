@@ -1,6 +1,11 @@
 User-agent: *
-Allow: /$
-Disallow: /
-
+Allow: /
+Disallow: /help
+Disallow: /account
+Disallow: /faq
+Disallow: /pricing
+Disallow: /displayQuestionSets
+Disallow: /displayOneQuestionSet/
+Disallow: /games
 
 Sitemap: https://quizplayground.com/sitemap.xml
