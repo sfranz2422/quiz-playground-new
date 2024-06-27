@@ -7,5 +7,6 @@ Disallow: /pricing
 Disallow: /displayQuestionSets
 Disallow: /displayOneQuestionSet/
 Disallow: /games
+Disallow: /assignQuiz
 
 Sitemap: https://quizplayground.com/sitemap.xml
