@@ -5,7 +5,7 @@ Disallow: /account
 Disallow: /faq
 Disallow: /pricing
 Disallow: /displayQuestionSets
-Disallow: /displayOneQuestionSet/
+Disallow: /displayOneQuestionSet
 Disallow: /games
 Disallow: /assignQuiz
 
