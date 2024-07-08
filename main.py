@@ -132,6 +132,10 @@ twilioClient = TC(account_sid, auth_token)
 #     """
 # )
 
+@app.route('/downloadv2')
+def download_filev2():
+    path = "quiz_playground_template.csv"
+    return send_file(path, as_attachment=True)
 
 @app.route('/download')
 def download_file():
