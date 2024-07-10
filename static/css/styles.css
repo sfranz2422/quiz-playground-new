@@ -89,3 +89,9 @@ display: inline-block;
 .text-large {
   font-size: 200%;
 }
+
+.background-color{
+background-color: white;
+   padding: 10px;
+   
+}

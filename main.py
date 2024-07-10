@@ -15,6 +15,7 @@ import requests
 import re
 import datetime
 import stripe
+import html
 from flask_sitemapper import Sitemapper
 # from flask_mail import Mail, Message
 from twilio.rest import Client as TC
@@ -1526,21 +1527,22 @@ def credits():
 
 @app.route('/randomQuiz')
 def randomQuiz():
+    return redirect(url_for('triviaQuiz'))
+    
+    # query = """
+    #  SELECT DISTINCT quizId
+    #  FROM complete_questions
+    #  WHERE questionSetPrivate = '0'
+    #  """
+    # myresult1 = getDatabaseConnection(query)
+    # # print(myresult1)
+    # randomList = random.choice(myresult1)
+    # randomQuiz = randomList[0]
 
-    query = """
-     SELECT DISTINCT quizId
-     FROM complete_questions
-     WHERE questionSetPrivate = '0'
-     """
-    myresult1 = getDatabaseConnection(query)
-    # print(myresult1)
-    randomList = random.choice(myresult1)
-    randomQuiz = randomList[0]
+    # query = f"SELECT row_to_json(complete_questions) FROM complete_questions WHERE quizid = '{randomQuiz}';"
+    # myresult2 = getDatabaseConnection(query)
 
-    query = f"SELECT row_to_json(complete_questions) FROM complete_questions WHERE quizid = '{randomQuiz}';"
-    myresult2 = getDatabaseConnection(query)
-
-    return myresult2
+    # return myresult2
 
 
 @app.route('/myresults')
@@ -1924,6 +1926,51 @@ def sitemap():
 @app.route('/robots.txt')
 def robots():
     return send_from_directory(app.static_folder, request.path[1:])
+
+
+
+
+@app.route('/triviaQuiz')
+def triviaQuiz():
+    
+    try:
+        response = requests.get('https://opentdb.com/api.php?amount=50&category=9&difficulty=medium&type=multiple')
+        #print(response.text)
+        json = response.json()
+        # print(json)
+        questions = json['results']
+        #   print(questions)
+        quiz = []
+        count = 1
+        for data in questions:
+            emptyList = []
+            question = {}
+            question["answer1"] = html.unescape(data['incorrect_answers'][0])
+            question["answer2"] = html.unescape(data['incorrect_answers'][1])
+            question["answer3"] = html.unescape(data['incorrect_answers'][2])
+            question["answer4"] = html.unescape(data['correct_answer'])
+            question["correctanswer"] = "4"
+            question["id"] = count
+            question["questionnumber"] = count
+            question["questionsetdescription"] = "Trivia"
+            question["questionsetprivate"] = "1"
+            question["questionsettitle"] = "Trivia"
+            question["questiontext"] = html.unescape(data['question'])
+            question["quizid"] = ""
+            question["subject"] = "Trivia"
+            question["teacherid"] = 2
+            question["timestamp"] = "1978-06-29T01:00:00.000000"
+            emptyList.append(question)
+            quiz.append(emptyList)
+            count += 1
+        # print(quiz)
+        return jsonify(quiz)
+    except:
+        return "error"
+
+
+
+
 
 
 if __name__ == '__main__':
