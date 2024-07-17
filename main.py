@@ -486,6 +486,15 @@ def asteroido():
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
 
+@app.route('/warehouse')
+def warehouse():
+    loggedIn, subscribed, teacherId = checkPermissions()
+    response = make_response(
+        render_template('warehouse.html', subscribed=subscribed))
+    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+    return response
+
 @app.route('/cybercity')
 def cybercity():
     loggedIn, subscribed, teacherId = checkPermissions()
@@ -713,6 +722,13 @@ def memoryGame(name):
 @app.route("/asteroido/<path:name>")
 def asteroidoGame(name):
     response = send_from_directory(f'./asteroido', name)
+    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+    return response
+
+@app.route("/warehouse/<path:name>")
+def warehouseGame(name):
+    response = send_from_directory(f'./warehouse', name)
     response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
@@ -1944,7 +1960,9 @@ def robots():
     return send_from_directory(app.static_folder, request.path[1:])
 
 
-
+@app.route('/google2ae4206fc72af134.html')
+def google2ae4206fc72af134():
+    return render_template("google2ae4206fc72af134.html")
 
 @app.route('/triviaQuiz')
 def triviaQuiz():
