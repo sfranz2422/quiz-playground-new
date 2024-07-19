@@ -17,6 +17,7 @@ import datetime
 import stripe
 import html
 from flask_sitemapper import Sitemapper
+
 # from flask_mail import Mail, Message
 from twilio.rest import Client as TC
 # from mailersend import emails
@@ -1958,6 +1959,9 @@ def sitemap():
 @app.route('/robots.txt')
 def robots():
     return send_from_directory(app.static_folder, request.path[1:])
+
+
+   
 
 
 @app.route('/google2ae4206fc72af134.html')
