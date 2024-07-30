@@ -3,38 +3,46 @@
 
 <main>
 
-  <section class="py-5 text-center container">
-    <div class="row py-lg-5">
+  <section class="text-center container">
+    <div class="row py-lg-2">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Games</h1>
-        <p class="lead text-body-secondary">Fun Games to use in your classroom that students want to play. Choose any <a class="link-danger text-decoration-none" href="{{ url_for('displayQuestionSets') }}">quiz</a> to use in any game.  Simply enter the quiz code at the start of the game.  <a class="link-danger text-decoration-none" href="{{ url_for('pricing') }}">Premium</a> users can view results and create quizzes.</p>
+        <p class="lead">Fun Games to use in your classroom that students want to play. 
+           <ul  class="list-group-flush list-unstyled">
+          <li><p class="lead">Choose any <a class="link-danger text-decoration-none" href="{{ url_for('displayQuestionSets') }}">quiz</a> to use in any game.</p> </li> 
+          <li><p class="lead">Simply enter the quiz code at the start of the game.</p> </li>
+          <li><p class="lead"><a class="link-danger text-decoration-none" href="{{ url_for('pricing') }}">Premium</a> users can view results and create quizzes.</p></li>
+           </ul>
         <!-- <p>
           <a class="btn btn-warning btn-lg px-4 gap-3" href="{{ url_for('displayQuestionSets') }}" >Quizzes</a>
          
         </p> -->
-        <h5>More Games Coming Soon!</h5>
-        <h5 class="text-danger">At This Time Our Games Are NOT Playable On Phones Or Tablets</h5>
-        <br>
-        <br>
-        
-      
+        <hr>
+        <h2 class="fw-light mb-1">Instructions</h2>
+        <ol  class="list-group-numbered list-group-flush list-unstyled">
+          <li class="list-group-item">
+            Pick a game and press play.
+          </li>
+          <li class="list-group-item">At the beginning of the game, enter a <a class="link-danger text-decoration-none" href="{{ url_for('displayQuestionSets') }}">quiz</a> code from your teacher or press the Trivia button.</li>
+        </ol>
+   
       </div>
     </div>
   </section>
 
   <!-- <div class="album py-5 bg-body-tertiary"> -->
-        <div class="album py-5">
+        <div class="album py-3">
 
       <div class="container text-center">
-        <h3 class="h3 mb-0">Instructions</h3>
+        <!-- <h2 class="fw-light mb-0">Instructions</h2>
         <ol  class="list-group-numbered list-group-flush list-unstyled">
           <li class="list-group-item">
             Pick a game and press play.
           </li>
-          <li class="list-group-item">At the beginning of the game enter a <a class="link-danger text-decoration-none" href="{{ url_for('displayQuestionSets') }}">quiz</a> code from your teacher or press the Trivia button.</li>
-        </ol>
+          <li class="list-group-item">At the beginning of the game, enter a <a class="link-danger text-decoration-none" href="{{ url_for('displayQuestionSets') }}">quiz</a> code from your teacher or press the Trivia button.</li>
+        </ol> -->
         <br>
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 text-center">
 
 
         <!-- new card -->
@@ -44,7 +52,7 @@
           <img src="{{ url_for('static', filename='assets/asteroido.png') }}" class="card-img-top" alt="Asteroido Game Image">
           <div class="card-body">
             <h5 class="card-title">Asteroido</h5>
-            <p class="card-text">High-Speed Space Adventure!</p>
+            <p class="card-text">Race through the Cosmos: Experience the Ultimate High-Speed Space Adventure.</p>
                <!-- <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('arthur',name='index.html') }}';">Play</button> -->
             <div class="d-grid gap-2 d-lg-flex justify-content-lg-center">
               <a class="btn btn-warning btn-lg px-4 gap-3" href="{{ url_for('asteroido') }}">Play</a>
@@ -61,7 +69,8 @@
           <img src="{{ url_for('static', filename='assets/warehouse.png') }}" class="card-img-top" alt="Asteroido Game Image">
           <div class="card-body">
             <h5 class="card-title">Warehouse Manager</h5>
-            <p class="card-text">A brain-teasing adventure, challenging you to think ahead and plan like a true warehouse wizard.</p>
+            <p class="card-text">
+            Engage your mind: Embark on a brain-teasing journey that challenges you to think ahead and strategize like a master warehouse wizard.</p>
 
            <div class="d-grid gap-2 d-lg-flex justify-content-lg-center">
               <a class="btn btn-warning btn-lg px-4 gap-3" href="{{ url_for('warehouse') }}">Play</a>
@@ -97,7 +106,7 @@
             <img src="{{ url_for('static', filename='assets/arthur.png') }}" class="card-img-top" alt="Arthur Game Image">
             <div class="card-body">
               <h5 class="card-title">Arthur the Greedy</h5>
-              <p class="card-text">Collect as many coins as possible and try to survive in this fun platform game.</p>
+              <p class="card-text">Be Greedy: Strive to survive in this entertaining platform game.</p>
                  <!-- <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('arthur',name='index.html') }}';">Play</button> -->
               <div class="d-grid gap-2 d-lg-flex justify-content-lg-center">
                 <a class="btn btn-warning btn-lg px-4 gap-3" href="{{ url_for('arthur') }}">Play</a>
@@ -124,6 +133,7 @@
         </div>
             </div>
         <!-- end new card -->
+
 
 
 
@@ -157,8 +167,8 @@
       </div>
     </div>
   </div>
+  <h5>More Games Coming Soon!</h5>
 
 </main>
-
 {% include 'footer.html' %}
 

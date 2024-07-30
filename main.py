@@ -1972,7 +1972,7 @@ def google2ae4206fc72af134():
 def triviaQuiz():
     
     try:
-        response = requests.get('https://opentdb.com/api.php?amount=50&category=9&difficulty=medium&type=multiple')
+        response = requests.get('https://opentdb.com/api.php?amount=50&category=9&type=multiple')
         #print(response.text)
         json = response.json()
         # print(json)
