@@ -478,6 +478,16 @@ def memory():
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
 
+@app.route('/tower')
+def tower():
+    loggedIn, subscribed, teacherId = checkPermissions()
+    response = make_response(
+        render_template('tower.html', subscribed=subscribed))
+    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+    return response
+
+
 @app.route('/asteroido')
 def asteroido():
     loggedIn, subscribed, teacherId = checkPermissions()
@@ -716,6 +726,13 @@ def cannonGame(name):
 @app.route("/memory/<path:name>")
 def memoryGame(name):
     response = send_from_directory(f'./memory', name)
+    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+    return response
+
+@app.route("/tower/<path:name>")
+def towerGame(name):
+    response = send_from_directory(f'./tower', name)
     response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
