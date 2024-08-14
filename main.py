@@ -450,6 +450,15 @@ def getQuestionSet(set):
 #     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
 #     return response
 
+@app.route('/climb')
+def climb():
+    loggedIn, subscribed, teacherId = checkPermissions()
+    response = make_response(
+        render_template('climb.html', subscribed=subscribed))
+    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+    return response
+
 
 @app.route('/arthur')
 def arthur():
@@ -740,6 +749,13 @@ def towerGame(name):
 @app.route("/asteroido/<path:name>")
 def asteroidoGame(name):
     response = send_from_directory(f'./asteroido', name)
+    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+    return response
+
+@app.route("/climb/<path:name>")
+def climbGame(name):
+    response = send_from_directory(f'./climb', name)
     response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
