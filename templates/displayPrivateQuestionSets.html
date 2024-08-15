@@ -52,7 +52,7 @@
                           <th scope="row"> <a class="link-danger text-decoration-none" href="{{ url_for('displayOneQuestionSet', id=quiz[0] ) }}">{{ quiz[0] }}</a></th>
                           <td>{{ quiz[1] }}</td>
                           <td class="text-wrap">{{ quiz[2] }}</td>
-                          <td> <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('assignQuiz', quizid = quiz[0]) }}';">Assign Quiz</button>  </td>
+                          <td> <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('assignQuiz', quizid = quiz[0]) }}';">Student Instructions</button>  </td>
 
 <td>
                           <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='{{ url_for('deleteQuiz', quizid = quiz[0]) }}';">Delete Quiz</button>
