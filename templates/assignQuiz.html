@@ -1,16 +1,18 @@
 {% include 'header.html' %}
 <!-- Content section-->
-     
+
+
        <main class="justify-content-center align-items-center text-center text-large">
 
 
          <h1 class="text-large bg-white">Student Instructions</h1>
               <br>
                <ol  class="list-group list-group-numbered list-group-flush">
-                        <li class="list-group-item text-large">Use a device to open: <span class="text-danger">quizp.app</span></li>
+                        <li class="list-group-item text-large">Use a device to open: <span class="text-danger"><a href="https://quizp.app" class="link-danger text-decoration-none">quizp.app</a></span></li>
                        <li class="list-group-item text-large">Choose A Game</li>
-                       <li class="list-group-item text-large">Enter <span class="text-danger">{{quizid}}</span>  In The Quiz ID Field
+                       <li class="list-group-item text-large">Enter <span class="text-danger"><a class="link-danger text-decoration-none" href="#" id="quizidtext" onclick="myFunction();return false;">{{quizid}}</a></span> In The Quiz ID Field
 </li>
+
                       
               
              
@@ -21,6 +23,9 @@
                <li class="list-group-item text-large">Enter <span class="text-danger">{{teacherId}}</span> In The Teacher ID Field</li>
         {% endif %}
 
+
+
+                            <li>  <span id="custom-tooltip" style="width: 400px;">Copied To Clipboard</span><textarea class=visuallyhidden id="box"></textarea></span></li>
                        </ol>
 
 
@@ -28,6 +33,42 @@
          
        </main>
  
+     <script>
+      var copyText = document.getElementById("quizidtext");
+     copyText.onclick = myFunction;
 
+     function myFunction() {
+       // Get the text field
+
+       // Select the text field
+       // copyText.select();
+       // copyText.setSelectionRange(0, 99999); // For mobile devices
+
+       // Copy the text inside the text field
+       navigator.clipboard.writeText(copyText.innerHTML);
+
+            copy();
+     
+     }
+
+
+
+            function copy(){
+                var Url = document.getElementById("box");
+                Url.value = window.location.href;
+                Url.focus();
+                Url.select();
+                document.getElementById("custom-tooltip").style.display = "inline";
+                document.execCommand("copy");
+                setTimeout( function() {
+                    document.getElementById("custom-tooltip").style.display = "none";
+                }, 1000);
+
+            };
+
+
+
+            
+     </script>
 
 {% include 'footer.html' %}

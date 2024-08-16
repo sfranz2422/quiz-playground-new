@@ -38,7 +38,7 @@
                               <td>{{ quiz[1] }}</td>
                               <td>{{ quiz[2] }}</td>
                               <td>{{ quiz[3] }}</td>
-                               <td> <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('assignQuiz', quizid = quiz[0]) }}';">Student Instructions</button>  </td>
+                               <td> <button type="button"  class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('assignQuiz', quizid = quiz[0]) }}';">Student Instructions</button>  </td>
                             </tr>
                        {% endfor %}
                           </tbody>
