@@ -1989,12 +1989,17 @@ def recordAnswer(id, correct, incorrect, teacherId, quizid, quiztitle,
 def sitemap():
   return sitemapper.generate()
 
+
 @app.route('/robots.txt')
 def robots():
     return send_from_directory(app.static_folder, request.path[1:])
 
 
-   
+@app.route('/ads.txt')
+def ads():
+       return send_from_directory(app.static_folder, request.path[1:])
+
+
 
 
 @app.route('/google2ae4206fc72af134.html')
