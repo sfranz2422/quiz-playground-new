@@ -16,6 +16,7 @@ import re
 import datetime
 import stripe
 import html
+import openai
 from flask_sitemapper import Sitemapper
 
 # from flask_mail import Mail, Message
@@ -35,6 +36,10 @@ import psycopg
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['APP_SECRET']
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+openai.api_key = os.environ['OPEN_AI_KEY']
+
 # app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
 
 # strip.api_key = os.environ['STRIPE_API_KEY']
@@ -2044,10 +2049,72 @@ def triviaQuiz():
     except:
         return "error"
 
+def get_ai_mc_question(text):
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant that generates educational questions."},
+            {"role": "user", "content": f"Based on the following text, generate a multiple-choice question with four answer options, and include the correct answer:\n\n{text}"}
+        ],
+        max_tokens=200,
+        temperature=0.7
+    )
 
+    # Extract the response
 
+    # print(response)
+    # print(response)
+    
+    # question = response['choices'][0]['message']['content']
+    mc_question = response.choices[0].message.content.strip()
 
+    # # Parse the generated question into components
+    # match = re.search(r'Question: (.*)  Options: (.*), Correct: (.*)', mc_question)
+    # if match:
+    #     question_text = match.group(1)
+    #     options = match.group(2).split(", ")
+    #     correct_answer = match.group(3)
 
+    #     # Create a structured dictionary
+    #     question_data = {
+    #         "questiontext": question_text,
+    #         "answer1": options[0],
+    #         "answer2": options[1],
+    #         "answer3": options[2],
+    #         "answer4": options[3],
+    #         "correctanswer": correct_answer
+    #     }
+
+    #     return question_data
+    # return None
+    
+    return mc_question
+
+@app.route('/aiquestion')
+def aiquestion():
+
+    with open("lesson.txt") as fo:
+        learning_text= fo.read()
+    # learning_text = "Photosynthesis is the process by which plants convert sunlight into food. It occurs in the chloroplasts of plant cells."
+    # question = get_ai_mc_question(learning_text)
+    questions_json = generate_multiple_choice_questions(learning_text, num_questions=3)
+
+    # print("Generated Multiple-Choice Question:", question)
+    return questions_json
+    # return jsonify(quiz)
+   
+def generate_multiple_choice_questions(learning_text, num_questions=3):
+    questions = []
+
+    for _ in range(num_questions):
+        question_data = get_ai_mc_question(learning_text)
+    
+        questions.append(question_data)
+        print(question_data)
+
+    # Convert the list of questions to JSON
+    questions_json = json.dumps({"questions": questions}, indent=2)
+    return questions_json
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
