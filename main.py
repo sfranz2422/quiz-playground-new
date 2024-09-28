@@ -18,6 +18,8 @@ import stripe
 import html
 import openai
 from flask_sitemapper import Sitemapper
+from youtube_transcript_api import YouTubeTranscriptApi
+
 
 # from flask_mail import Mail, Message
 from twilio.rest import Client as TC
@@ -2054,67 +2056,85 @@ def get_ai_mc_question(text):
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a helpful assistant that generates educational questions."},
-            {"role": "user", "content": f"Based on the following text, generate a multiple-choice question with four answer options, and include the correct answer:\n\n{text}"}
+            {"role": "user", "content": f"Based on the following text, produce a JSON object.  The object should contain a multiple choice question with the key 'questiontext' and each answer having the keys 'answer1', 'answer2', 'answer3', 'answer4'.  The correct answer should have the key, 'correctanswer' and be a number from 1 to 4:\n\n{text}"}
         ],
         max_tokens=200,
         temperature=0.7
     )
 
-    # Extract the response
 
-    # print(response)
-    # print(response)
-    
-    # question = response['choices'][0]['message']['content']
     mc_question = response.choices[0].message.content.strip()
 
-    # # Parse the generated question into components
-    # match = re.search(r'Question: (.*)  Options: (.*), Correct: (.*)', mc_question)
-    # if match:
-    #     question_text = match.group(1)
-    #     options = match.group(2).split(", ")
-    #     correct_answer = match.group(3)
+    cleaned = clean_json_string(mc_question)
 
-    #     # Create a structured dictionary
-    #     question_data = {
-    #         "questiontext": question_text,
-    #         "answer1": options[0],
-    #         "answer2": options[1],
-    #         "answer3": options[2],
-    #         "answer4": options[3],
-    #         "correctanswer": correct_answer
-    #     }
 
-    #     return question_data
-    # return None
+    return cleaned
+
+def clean_json_string(json_string):
+    pattern = r'^```json\s*(.*?)\s*```$'
+    cleaned_string = re.sub(pattern, r'\1', json_string, flags=re.DOTALL)
+    cleaned_string = cleaned_string.replace("\n", "")
+
+    return cleaned_string.strip()
+
+
+def aiquestion(text=""):
     
-    return mc_question
+    result = YouTubeTranscriptApi.get_transcript("V_HRW-NzBg4&list=PLMb6Yv6-w-RWngEjn_YeMzVwgyXBZ73Bf&index=3&t=701s")
+    # print(result)
 
-@app.route('/aiquestion')
-def aiquestion():
+    text = ""
+    for content in result:
+        text += content['text']
 
-    with open("lesson.txt") as fo:
-        learning_text= fo.read()
-    # learning_text = "Photosynthesis is the process by which plants convert sunlight into food. It occurs in the chloroplasts of plant cells."
-    # question = get_ai_mc_question(learning_text)
-    questions_json = generate_multiple_choice_questions(learning_text, num_questions=3)
+    length = len(text)
+    if length > 10000:
+        text = text[:10000]
 
-    # print("Generated Multiple-Choice Question:", question)
+    questions_json = generate_multiple_choice_questions(text, num_questions=10)
+#     print(questions_json)
+
+    for question in questions_json:
+        print("\n\n")
+        print(question["questiontext"])
+        print(question["answer1"])
+        print(question["correctanswer"])
+        print("\n\n")
     return questions_json
-    # return jsonify(quiz)
-   
-def generate_multiple_choice_questions(learning_text, num_questions=3):
+
+
+def generate_multiple_choice_questions(learning_text, num_questions=10):
     questions = []
 
     for _ in range(num_questions):
         question_data = get_ai_mc_question(learning_text)
-    
-        questions.append(question_data)
-        print(question_data)
 
-    # Convert the list of questions to JSON
-    questions_json = json.dumps({"questions": questions}, indent=2)
-    return questions_json
+
+
+#         print(question_data)
+        my_dict = json.loads(question_data)
+        questions.append(my_dict)
+#         print(my_dict)
+
+
+    return questions
+
+
+
+
+
+
+
+
+
+
+aiquestion()
+
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
