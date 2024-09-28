@@ -17,6 +17,9 @@ import datetime
 import stripe
 import html
 import openai
+import pytube
+from pytube import extract
+
 from flask_sitemapper import Sitemapper
 from youtube_transcript_api import YouTubeTranscriptApi
 
@@ -2091,10 +2094,10 @@ def clean_json_string(json_string):
     return cleaned_string.strip()
 
 
-def aiquestion(text=""):
+def aiquestion(id):
     
-    result = YouTubeTranscriptApi.get_transcript("V_HRW-NzBg4&list=PLMb6Yv6-w-RWngEjn_YeMzVwgyXBZ73Bf&index=3&t=701s")
-    # print(result)
+    result = YouTubeTranscriptApi.get_transcript(id)
+    # # print(result)
 
     text = ""
     for content in result:
@@ -2141,7 +2144,85 @@ def generate_multiple_choice_questions(learning_text, num_questions=10):
 
 
 
-# aiquestion()
+
+@app.route('/addQuestionFormYouTube', methods=['GET', 'POST'])
+def addQuestionFormYouTube():
+    msg = ""
+    loggedIn, subscribed, teacherId = checkPermissions()
+    if loggedIn == True and subscribed == True:
+
+        if request.method == "POST" and 'youtubelink' in request.form or 'aitext' in request.form and 'token' in request.form:
+
+            youtubelink = request.form['youtubelink']
+            
+            id=extract.video_id(youtubelink)
+            # print(id)
+            aiquestion(id)
+            #extract youtube video id from link
+            #send to ai
+            #get results from ai
+            #save one question at a time in database
+            
+
+            # quizId = request.form['quizId']
+            # teacherId = request.form['teacherId']
+            # questionText = request.form['questionText']
+
+
+            # with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+            #     with conn.cursor() as cur:
+            #         SQL = "SELECT * FROM complete_questions WHERE quizId = %s AND teacherid = %s"
+            #         data = (quizId, teacherId,  )
+
+            #         cur.execute(SQL, data)
+
+            #         myresult = cur.fetchall()
+
+            # if myresult:
+            #     # print(myresult[0])
+
+
+            #     questionssettitle = myresult[0][9]
+            #     questionsetdescription =myresult[0][10]
+            #     questionsetprivate = myresult[0][11]
+            #     subject = myresult[0][13]
+            #     questionnumber = myresult[0][2]
+
+            #     if request.form['answer1']:
+            #         answer1 = request.form['answer1']
+            #     else:
+            #         answer1 = "blank"
+            #     if request.form['answer2']:
+            #         answer2 = request.form['answer2']
+            #     else:
+            #         answer2 = "blank"
+            #     if request.form['answer3']:
+            #         answer3 = request.form['answer3']
+            #     else:
+            #         answer3 = "blank"
+            #     if request.form['answer4']:
+            #         answer4 = request.form['answer4']
+            #     else:
+            #         answer4 = "blank"
+
+            #     with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+            #         with conn.cursor() as cur:
+            #             SQL = "INSERT INTO complete_questions (quizid, questionnumber, questiontext, answer1, answer2, answer3, answer4, correctanswer, questionsettitle, questionsetdescription, questionsetprivate, teacherid, subject) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            #             data = (quizId,questionnumber,  questionText, answer1, answer2, answer3, answer4, correctAnswer, questionssettitle, questionsetdescription, questionsetprivate, teacherId,subject  )
+
+            #             cur.execute(SQL, data)
+
+            #     return redirect(url_for('displayOneQuestionSet', id=quizId))
+
+            # else:
+            #     msg = "Access Denied"
+            #     return render_template('addQuestionForm.html', msg=msg,loggedIn=loggedIn, subscribed=subscribed, teacherId=teacherId)
+
+
+
+
+    return redirect(url_for('home'))
+
 
 
 

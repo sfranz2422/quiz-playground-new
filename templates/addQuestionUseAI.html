@@ -5,7 +5,7 @@
 
 
             <div class="page-header pt-3">
-            <h2>Add Question</h2>
+            <h2>Generate Questions</h2>
             </div>
             <p class="lead"></p>
             <hr>
@@ -17,35 +17,16 @@
 
                   
                                        
-                                        <form class="row g-3" method="POST" action="{{url_for('addQuestionForm')}}">
-                                           <textarea class="form-control" id="validationTextarea" placeholder="Question" name="questionText" required></textarea>
+                                        <form class="row g-3" method="POST" action="{{url_for('addQuestionFormYouTube')}}">
 
-                                          <table>
-                                          <tr>
-                                              <td>A. <textarea class="form-control" id="validationTextarea" placeholder="Answer 1" name="answer1" required></textarea></td>
-                                              <td>B. <textarea class="form-control" id="validationTextarea" placeholder="Answer 2" name="answer2" required></textarea></td>
-                                          </tr>
-                                          <tr>
-                                        
-                                              <td>C. <textarea class="form-control" id="validationTextarea" placeholder="Answer 3" name="answer3" required></textarea>
-                                          
-                                           
-
-                                               <td>D. <textarea class="form-control" id="validationTextarea" placeholder="Answer 4" name="answer4" required></textarea>
-                                             
+                                             <textarea class="form-control" id="validationTextarea" placeholder="You Tube Video Link" name="youtubelink"></textarea>
+                                            <h4>OR</h4>
+                                             <textarea class="form-control" id="validationTextarea" placeholder="Paste Text" name="aitext"></textarea>
                                             
-                                          </tr>
-                                          </table>
-              
-      <!-- Correct Answer:  <input class="form-control" type="text" name="correctAnswer" pattern="[ABCD]" required> -->
-                                      
-                                                   <select id="correctAnswer" name="correctAnswer" class="form-select" aria-label="Correct Answer" required>
-                                                     <option value="A">Correct Answer</option>
-                                                     <option value="A">A</option>
-                                                     <option value="B">B</option>
-                                                     <option value="C">C</option>
-                                                      <option value="D">D</option>
-                                                   </select>
+                                          
+
+                                  
+
 
                                           <br>
 
@@ -62,7 +43,7 @@
 
 
                                           <div class="d-grid gap-2 d-lg-flex justify-content-lg-center">
-                                            <button type="submit" class="btn btn-warning btn-lg px-4 gap-3">Add Question</button>
+                                            <button type="submit" class="btn btn-warning btn-lg px-4 gap-3">Generate Questions</button>
                                                     <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{  url_for('displayOneQuestionSet', id=set) }}';">Cancel</button>    
                                           </div>
 
