@@ -1656,6 +1656,19 @@ def addQuestion(set, teacherid):
     return redirect(url_for('home'))
 
 
+
+
+@app.route('/addQuestionUseAI/<set>/<teacherid>')
+def addQuestionUseAI(set, teacherid):
+    token = uuid.uuid4()
+    loggedIn, subscribed, teacherId = checkPermissions()
+    if loggedIn == True and subscribed == True:
+        return render_template("addQuestionUseAI.html", set=set, teacherid=teacherid, loggedIn=loggedIn, subscribed=subscribed, token=token)
+
+
+    return redirect(url_for('home'))
+
+
 @app.route('/addQuestionForm', methods=['GET', 'POST'])
 def addQuestionForm():
     msg = ""
@@ -2128,7 +2141,7 @@ def generate_multiple_choice_questions(learning_text, num_questions=10):
 
 
 
-aiquestion()
+# aiquestion()
 
 
 

@@ -50,6 +50,8 @@
                 <br>
                       <br>
   <a class="link-danger text-decoration-none" href="{{ url_for('addQuestion', set=result[0][1], teacherid=result[0][12]) }}">Add Question</a>
+            <br>
+           <a class="link-danger text-decoration-none" href="{{ url_for('addQuestionUseAI', set=result[0][1], teacherid=result[0][12]) }}">Generate Questions From YouTube Video or Text using AI</a>
                       {% endif %}
 
                       
