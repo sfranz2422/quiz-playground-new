@@ -7,10 +7,25 @@
             <div class="page-header pt-3">
             <h2>Generate Questions</h2>
             </div>
+
+
+
+
+
             <p class="lead"></p>
             <hr>
             <div class="row">
-                <div class="col-12">
+                <div style=" width: 300px;
+                    height: 300px;
+                    display: none;
+                    text-align:center;
+                    visibility: hidden;  
+                    /* background: url(/static/assets/Orbit-256px.gif) no-repeat; */
+                    cursor: wait;" id="loading" class="my-auto mx-auto">
+                    <img src="{{ url_for('static',filename='assets/Orbit-256px.gif') }}">
+
+                    </div>
+                <div class="col-12" id="content">
 
 
 
@@ -43,7 +58,9 @@
 
 
                                           <div class="d-grid gap-2 d-lg-flex justify-content-lg-center">
-                                            <button type="submit" class="btn btn-warning btn-lg px-4 gap-3">Generate Questions</button>
+                                           
+                                            <button type="submit" class="btn btn-warning btn-lg px-4 gap-3" onclick="loading();">Generate Questions</button>
+                                              
                                                     <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{  url_for('displayOneQuestionSet', id=set) }}';">Cancel</button>    
                                           </div>
 
@@ -53,6 +70,7 @@
 
 
                                          </div>
+        
 
 
 
@@ -79,7 +97,17 @@
     </div>
 </div>
 
+<script type="text/javascript">
+        function loading(){
+            const loading = document.getElementById("loading");
+            loading.style.display='block';
+            loading.style.visibility = 'visible'; 
+            const content = document.getElementById("content");
+            content.style.visibility = 'hidden';  
+            content.style.display='none';
 
+        }
+</script>
 
         <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

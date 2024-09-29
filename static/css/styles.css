@@ -130,3 +130,11 @@ background-color: white;
     border-radius: 4px;
     color: #fff;
 }
+
+/* div#loading {
+    width: 35px;
+    height: 35px;
+    display: block;
+    background: url(/static/assets/Orbit-256px.gif) no-repeat;
+    cursor: wait;
+    } */
