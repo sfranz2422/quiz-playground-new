@@ -2270,8 +2270,48 @@ def addQuestionFormYouTube():
 
 
 
+@app.route('/downloadQuizAsCSV/<set>/<teacherid>')
+def downloadQuizAsCSV(set, teacherid):
+    quizId = set
+    teacherId = teacherid
+    
+    loggedIn, subscribed, teacherId = checkPermissions()
+    if loggedIn == True and subscribed == True:
+
+        
+        with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+            with conn.cursor() as cur:
+                SQL = "SELECT * FROM complete_questions WHERE quizId = %s AND teacherid = %s"
+                data = (quizId, teacherId,  )
+
+                cur.execute(SQL, data)
+
+                myresult = cur.fetchall()
+
+        if myresult:
+            print(myresult)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        # path = "quiz_playground_template.csv"
+        # return send_file(path, as_attachment=True)
+
+
+
+
+    return redirect(url_for('home'))
 
 
 
