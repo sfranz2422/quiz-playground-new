@@ -2110,12 +2110,12 @@ def aiquestion(id):
     questions_json = generate_multiple_choice_questions(text, num_questions=10)
 #     print(questions_json)
 
-    for question in questions_json:
-        print("\n\n")
-        print(question["questiontext"])
-        print(question["answer1"])
-        print(question["correctanswer"])
-        print("\n\n")
+    # for question in questions_json:
+    #     print("\n\n")
+    #     print(question["questiontext"])
+    #     print(question["answer1"])
+    #     print(question["correctanswer"])
+    #     print("\n\n")
     return questions_json
 
 
@@ -2139,12 +2139,6 @@ def generate_multiple_choice_questions(learning_text, num_questions=10):
 
 
 
-
-
-
-
-
-
 @app.route('/addQuestionFormYouTube', methods=['GET', 'POST'])
 def addQuestionFormYouTube():
     msg = ""
@@ -2157,66 +2151,83 @@ def addQuestionFormYouTube():
             
             id=extract.video_id(youtubelink)
             # print(id)
-            aiquestion(id)
+            questions_json = aiquestion(id)
             #extract youtube video id from link
             #send to ai
             #get results from ai
             #save one question at a time in database
             
-
-            # quizId = request.form['quizId']
-            # teacherId = request.form['teacherId']
-            # questionText = request.form['questionText']
-
-
-            # with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
-            #     with conn.cursor() as cur:
-            #         SQL = "SELECT * FROM complete_questions WHERE quizId = %s AND teacherid = %s"
-            #         data = (quizId, teacherId,  )
-
-            #         cur.execute(SQL, data)
-
-            #         myresult = cur.fetchall()
-
-            # if myresult:
-            #     # print(myresult[0])
+            print(questions_json)
+            
+            quizId = request.form['quizId']
+            teacherId = request.form['teacherId']
+            
 
 
-            #     questionssettitle = myresult[0][9]
-            #     questionsetdescription =myresult[0][10]
-            #     questionsetprivate = myresult[0][11]
-            #     subject = myresult[0][13]
-            #     questionnumber = myresult[0][2]
+            with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+                with conn.cursor() as cur:
+                    SQL = "SELECT * FROM complete_questions WHERE quizId = %s AND teacherid = %s"
+                    data = (quizId, teacherId,  )
 
-            #     if request.form['answer1']:
-            #         answer1 = request.form['answer1']
-            #     else:
-            #         answer1 = "blank"
-            #     if request.form['answer2']:
-            #         answer2 = request.form['answer2']
-            #     else:
-            #         answer2 = "blank"
-            #     if request.form['answer3']:
-            #         answer3 = request.form['answer3']
-            #     else:
-            #         answer3 = "blank"
-            #     if request.form['answer4']:
-            #         answer4 = request.form['answer4']
-            #     else:
-            #         answer4 = "blank"
+                    cur.execute(SQL, data)
 
-            #     with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
-            #         with conn.cursor() as cur:
-            #             SQL = "INSERT INTO complete_questions (quizid, questionnumber, questiontext, answer1, answer2, answer3, answer4, correctanswer, questionsettitle, questionsetdescription, questionsetprivate, teacherid, subject) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-            #             data = (quizId,questionnumber,  questionText, answer1, answer2, answer3, answer4, correctAnswer, questionssettitle, questionsetdescription, questionsetprivate, teacherId,subject  )
+                    myresult = cur.fetchall()
 
-            #             cur.execute(SQL, data)
+            if myresult:
+                # print(myresult[0])
 
-            #     return redirect(url_for('displayOneQuestionSet', id=quizId))
 
-            # else:
-            #     msg = "Access Denied"
-            #     return render_template('addQuestionForm.html', msg=msg,loggedIn=loggedIn, subscribed=subscribed, teacherId=teacherId)
+                questionssettitle = myresult[0][9]
+                questionsetdescription =myresult[0][10]
+                questionsetprivate = myresult[0][11]
+                subject = myresult[0][13]
+                questionnumber = myresult[0][2]
+
+                # if request.form['answer1']:
+                #     answer1 = request.form['answer1']
+                # else:
+                #     answer1 = "blank"
+                # if request.form['answer2']:
+                #     answer2 = request.form['answer2']
+                # else:
+                #     answer2 = "blank"
+                # if request.form['answer3']:
+                #     answer3 = request.form['answer3']
+                # else:
+                #     answer3 = "blank"
+                # if request.form['answer4']:
+                #     answer4 = request.form['answer4']
+                # else:
+                #     answer4 = "blank"
+
+
+                for question in questions_json:
+                    questionText = question["questiontext"]
+                    answer1 = question["answer1"]
+                    answer2 = question["answer2"]
+                    answer3 = question["answer3"]
+                    answer4 = question["answer4"]
+                    correctAnswer = question["correctanswer"]
+            
+
+
+                    with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+                        with conn.cursor() as cur:
+                            SQL = "INSERT INTO complete_questions (quizid, questionnumber, questiontext, answer1, answer2, answer3, answer4, correctanswer, questionsettitle, questionsetdescription, questionsetprivate, teacherid, subject) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                            data = (quizId,questionnumber,  questionText, answer1, answer2, answer3, answer4, correctAnswer, questionssettitle, questionsetdescription, questionsetprivate, teacherId,subject  )
+    
+                            cur.execute(SQL, data)
+    
+    
+                    questionnumber += 1
+
+                
+
+                return redirect(url_for('displayOneQuestionSet', id=quizId))
+
+            else:
+                msg = "Access Denied"
+                return render_template('addQuestionForm.html', msg=msg,loggedIn=loggedIn, subscribed=subscribed, teacherId=teacherId)
 
 
 
