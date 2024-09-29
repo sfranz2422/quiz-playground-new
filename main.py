@@ -2119,6 +2119,25 @@ def aiquestion(id):
     return questions_json
 
 
+def aiquestionTextOnly(text):
+
+
+    length = len(text)
+    if length > 10000:
+        text = text[:10000]
+
+    questions_json = generate_multiple_choice_questions(text, num_questions=10)
+#     print(questions_json)
+
+    # for question in questions_json:
+    #     print("\n\n")
+    #     print(question["questiontext"])
+    #     print(question["answer1"])
+    #     print(question["correctanswer"])
+    #     print("\n\n")
+    return questions_json
+
+
 def generate_multiple_choice_questions(learning_text, num_questions=10):
     questions = []
 
@@ -2148,10 +2167,25 @@ def addQuestionFormYouTube():
         if request.method == "POST" and 'youtubelink' in request.form or 'aitext' in request.form and 'token' in request.form:
 
             youtubelink = request.form['youtubelink']
+            aitext = request.form['aitext']
+
+
+            if len(aitext) > 3 and len(youtubelink) > 3:
+                return redirect(url_for('home'))
             
-            id=extract.video_id(youtubelink)
-            # print(id)
-            questions_json = aiquestion(id)
+            elif len(youtubelink) > 3:
+                id=extract.video_id(youtubelink)
+                # print(id)
+                questions_json = aiquestion(id)
+            
+            elif len(aitext) > 3:
+                questions_json = aiquestionTextOnly(aitext)
+
+
+            else:
+                msg = "You must supply a YouTube link or paste text."
+                return redirect(url_for('home'))
+                
             #extract youtube video id from link
             #send to ai
             #get results from ai
