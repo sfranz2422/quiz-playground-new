@@ -34,9 +34,16 @@
                                        
                                         <form class="row g-3" method="POST" action="{{url_for('addQuestionFormYouTube')}}">
 
-                                             <textarea class="form-control" id="validationTextarea" placeholder="You Tube Video Link" name="youtubelink"></textarea>
+                                            <h5>
+                                              <small class="text-muted">Paste YouTube URL</small>
+                                            </h5>
+                                             <textarea class="form-control" id="validationTextarea" placeholder="YouTube URL" name="youtubelink"></textarea>
                                             <h4>OR</h4>
-                                             <textarea class="form-control" id="validationTextarea" placeholder="Paste Text" name="aitext"></textarea>
+                                            <h5>
+                                              <small class="text-muted">Paste text from website or document</small>
+                                            </h5>
+                                            
+                                             <textarea class="form-control" id="validationTextarea" placeholder="Text" name="aitext"></textarea>
                                             
                                           
 

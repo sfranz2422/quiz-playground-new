@@ -23,6 +23,7 @@ from pytube import extract
 from flask_sitemapper import Sitemapper
 from youtube_transcript_api import YouTubeTranscriptApi
 
+FILE_TO_DELETE = ""
 
 # from flask_mail import Mail, Message
 from twilio.rest import Client as TC
@@ -602,7 +603,7 @@ FROM {dbname};"""
 @sitemapper.include(lastmod="2024-06-23")
 @app.route('/')
 def home():
-
+    delete(FILE_TO_DELETE)
     # for _ in range(10):
     #     print(get_random_string())
 
@@ -682,6 +683,7 @@ def displayQuestionSets():
 
 @app.route('/displayOneQuestionSet/<id>')
 def displayOneQuestionSet(id):
+    delete(FILE_TO_DELETE)
     result = getOneQuestionSet(id)
 
     loggedIn, subscribed, teacherId = checkPermissions()
@@ -695,6 +697,7 @@ def displayOneQuestionSet(id):
 
 @app.route('/displayPrivateQuestionSets')
 def displayPrivateQuestionSets():
+    delete(FILE_TO_DELETE)
     loggedIn, subscribed, teacherId = checkPermissions()
     if loggedIn == True:
         username = session['username']
@@ -713,6 +716,7 @@ def displayPrivateQuestionSets():
 
 @app.route('/account')
 def account():
+    delete(FILE_TO_DELETE)
     loggedIn, subscribed, teacherId = checkPermissions()
     if loggedIn == True and subscribed == True:
         username = session['username']
@@ -2272,6 +2276,7 @@ def addQuestionFormYouTube():
 
 @app.route('/downloadQuizAsCSV/<set>/<teacherid>')
 def downloadQuizAsCSV(set, teacherid):
+    global FILE_TO_DELETE
     quizId = set
     teacherId = teacherid
     
@@ -2289,31 +2294,57 @@ def downloadQuizAsCSV(set, teacherid):
                 myresult = cur.fetchall()
 
         if myresult:
-            print(myresult)
+            # print(myresult)
+            filename = makeCSVFile(myresult)
 
 
 
+        path = f"{filename}"
 
 
-
-
-
-
-
-
-
-
-
+        FILE_TO_DELETE = path
+       
+        return send_file(path, as_attachment=True)
         
-        # path = "quiz_playground_template.csv"
-        # return send_file(path, as_attachment=True)
-
-
-
 
     return redirect(url_for('home'))
+    
 
+def delete(filename):
+    try:
+        os.remove(filename)
+    except:
+        print("The file does not exist")
 
+def makeCSVFile(data):
+    delete(FILE_TO_DELETE)
+    header = [["Question", "Answer A", "Answer B", "Answer C", "Answer D", "Correct Answer"]]
+    for question in data:
+#         print(question)
+        header.append(add_question_to_csv(question))
+    filename = f"{data[0][10]}.csv"
+    # Create and write to CSV file
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(header)
+    return filename
+
+def add_question_to_csv(question):
+    new_question = []
+    new_question.append(question[3])
+    new_question.append(question[4])
+    new_question.append(question[5])
+    new_question.append(question[6])
+    new_question.append(question[7])
+    if question[8] == "1":
+        new_question.append("A")
+    elif question[8] == "2":
+        new_question.append("B")
+    elif question[8] == "3":
+        new_question.append("C")
+    elif question[8] == "4":
+        new_question.append("D")
+    return new_question
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
