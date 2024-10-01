@@ -517,6 +517,15 @@ def asteroido():
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
 
+@app.route('/coinDash')
+def coinDash():
+    loggedIn, subscribed, teacherId = checkPermissions()
+    response = make_response(
+        render_template('coinDash.html', subscribed=subscribed))
+    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+    return response
+
 @app.route('/warehouse')
 def warehouse():
     loggedIn, subscribed, teacherId = checkPermissions()
@@ -795,6 +804,12 @@ def outpostGame(name):
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
 
+@app.route("/coinDash/<path:name>")
+def coinDashGame(name):
+    response = send_from_directory(f'./coinDash', name)
+    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+    return response
 
 
 @app.route('/edit_one_question/<id>')
