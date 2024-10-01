@@ -517,14 +517,25 @@ def asteroido():
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
 
-@app.route('/coinDash')
+# @app.route('/getQuestionSet/<set>')
+# def getQuestionSet(set):
+
+@app.route('/coinDash',methods=["GET", "POST"])
 def coinDash():
+    id = "None"
+    result = "None"
+    if request.method == "POST" and 'quizId' in request.form:
+        id = request.form['quizId']
+        result = getQuestionSet(id)
+        print(result)
     loggedIn, subscribed, teacherId = checkPermissions()
     response = make_response(
-        render_template('coinDash.html', subscribed=subscribed))
+        render_template('coinDash.html', subscribed=subscribed, result=result))
+    
     response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
+    # return redirect(url_for("coinDashGame", name='index.html'))
 
 @app.route('/warehouse')
 def warehouse():
