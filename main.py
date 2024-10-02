@@ -19,6 +19,7 @@ import html
 import openai
 import pytube
 from pytube import extract
+from urllib.parse import quote, unquote
 
 from flask_sitemapper import Sitemapper
 from youtube_transcript_api import YouTubeTranscriptApi
@@ -303,7 +304,7 @@ def get_private_question_sets(teacherId):
     with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
         with conn.cursor() as cur:
             # SQL = "SELECT DISTINCT quizId, questionSetTitle, questionSetDescription FROM complete_questions WHERE teacherId = %s ORDER BY questionSetTitle"
-            SQL = "SELECT DISTINCT ON (questionSetTitle, quizId) quizId, questionSetTitle, questionSetDescription timestamp FROM complete_questions WHERE teacherId = %s ORDER BY questionSetTitle, quizId"
+            SQL = "SELECT DISTINCT ON (questionSetTitle, quizId) quizId, questionSetTitle, questionSetDescription, timestamp, youtubeurl, teacherid FROM complete_questions WHERE teacherId = %s ORDER BY questionSetTitle, quizId"
             data = (teacherId, )
 
             cur.execute(SQL, data)
@@ -520,22 +521,7 @@ def asteroido():
 # @app.route('/getQuestionSet/<set>')
 # def getQuestionSet(set):
 
-@app.route('/coinDash',methods=["GET", "POST"])
-def coinDash():
-    id = "None"
-    result = "None"
-    if request.method == "POST" and 'quizId' in request.form:
-        id = request.form['quizId']
-        result = getQuestionSet(id)
-        print(result)
-    loggedIn, subscribed, teacherId = checkPermissions()
-    response = make_response(
-        render_template('coinDash.html', subscribed=subscribed, result=result))
-    
-    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
-    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
-    return response
-    # return redirect(url_for("coinDashGame", name='index.html'))
+
 
 @app.route('/warehouse')
 def warehouse():
@@ -2277,8 +2263,8 @@ def addQuestionFormYouTube():
 
                     with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
                         with conn.cursor() as cur:
-                            SQL = "INSERT INTO complete_questions (quizid, questionnumber, questiontext, answer1, answer2, answer3, answer4, correctanswer, questionsettitle, questionsetdescription, questionsetprivate, teacherid, subject) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-                            data = (quizId,questionnumber,  questionText, answer1, answer2, answer3, answer4, correctAnswer, questionssettitle, questionsetdescription, questionsetprivate, teacherId,subject  )
+                            SQL = "INSERT INTO complete_questions (quizid, questionnumber, questiontext, answer1, answer2, answer3, answer4, correctanswer, questionsettitle, questionsetdescription, questionsetprivate, teacherid, subject, youtubeurl) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                            data = (quizId,questionnumber,  questionText, answer1, answer2, answer3, answer4, correctAnswer, questionssettitle, questionsetdescription, questionsetprivate, teacherId,subject,youtubelink  )
     
                             cur.execute(SQL, data)
     
@@ -2371,6 +2357,83 @@ def add_question_to_csv(question):
     elif question[8] == "4":
         new_question.append("D")
     return new_question
+
+
+@app.route('/getVideo/<path:youtubeurl>/<teacherid>/<set>')
+def getVideo(youtubeurl, teacherid, set):
+    print(unquote(youtubeurl))
+    print(teacherid)
+    print(set)
+    youtubeurl = unquote(youtubeurl)
+    youtubeurl = embed_url(youtubeurl)
+    newurl = youtubeurl.replace("https:/", "",1)
+    
+    loggedIn, subscribed, teacherId = checkPermissions()
+    if loggedIn == True and subscribed == True:
+        # response = requests.post(url_for('second_route', _external=True), data=data)
+        
+        return render_template("display_video.html", set=set, teacherid = teacherid, youtubeurl=newurl)
+
+    
+    return redirect(url_for('home'))
+
+
+@app.route('/videoQuestions/<teacherid>/<set>/<int:number>')
+def videoQuestions(teacherid, set, number):
+
+    print(teacherid)
+    print(set)
+    print(number)
+    print(type(number))
+    
+    
+    
+    loggedIn, subscribed, teacherId = checkPermissions()
+    if loggedIn == True and subscribed == True:
+        # response = requests.post(url_for('second_route', _external=True), data=data)
+        questions = getQuestionSet(set)
+
+        
+
+        question = random.choice(questions)
+        # print(questions)
+        number = question[0]["questionnumber"]
+        print("New number " + str(number))
+
+        
+
+        return render_template("videoQuestions.html", question=question, questions = questions, number = number)
+
+
+    return redirect(url_for('home'))
+
+
+
+
+def embed_url(video_url):
+    regex = r"(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)"
+
+    return re.sub(regex, r"https://www.youtube.com/embed/\1",video_url)
+
+
+@app.route('/coinDash',methods=["GET", "POST"])
+def coinDash():
+    id = "None"
+    result = "None"
+    if request.method == "POST" and 'quizId' in request.form:
+        id = request.form['quizId']
+        result = getQuestionSet(id)
+        print(result)
+    loggedIn, subscribed, teacherId = checkPermissions()
+    response = make_response(
+        render_template('coinDash.html', subscribed=subscribed, result=result))
+
+    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+    return response
+    # return redirect(url_for("coinDashGame", name='index.html'))
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

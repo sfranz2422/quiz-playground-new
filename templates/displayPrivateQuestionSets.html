@@ -22,10 +22,11 @@
                     <table id="data" class="table">
                       <thead>
                         <tr>
-                          <th scope="col" class="col-2">Edit</th>
+                          <th scope="col" class="col-2"></th>
                           <th scope="col">Title</th>
                           <th scope="col">Description</th>
                           <th scope="col"></th>
+                             <th scope="col"></th>
                            <th scope="col"></th>
                         </tr>
                       </thead>
@@ -52,6 +53,15 @@
                           <th scope="row"> <a class="link-danger text-decoration-none" href="{{ url_for('displayOneQuestionSet', id=quiz[0] ) }}">Add / Generate / Download</a></th>
                           <td>{{ quiz[1] }}</td>
                           <td class="text-wrap">{{ quiz[2] }}</td>
+
+{% if quiz[4] %}
+
+                             <td> <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('getVideo', youtubeurl = quiz[4], teacherid = quiz[5],set = quiz[0] ) }}';">Make Lesson</button>  </td>
+                            {% else %}
+                             <td>  </td>
+                            
+                            {% endif %}
+                            
                           <td> <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('assignQuiz', quizid = quiz[0]) }}';">Student Instructions</button>  </td>
 
 <td>
