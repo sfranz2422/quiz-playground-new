@@ -2362,6 +2362,7 @@ def add_question_to_csv(question):
 
 @app.route('/getVideo/<path:youtubeurl>/<teacherid>/<set>')
 def getVideo(youtubeurl, teacherid, set):
+    loggedIn, subscribed, teacherId = checkPermissions()
     session.pop('questionnumber', None)
     print(unquote(youtubeurl))
     print(teacherid)
@@ -2370,19 +2371,19 @@ def getVideo(youtubeurl, teacherid, set):
     youtubeurl = embed_url(youtubeurl)
     newurl = youtubeurl.replace("https:/", "",1)
     
-    loggedIn, subscribed, teacherId = checkPermissions()
-    if loggedIn == True and subscribed == True:
+
+   
         # response = requests.post(url_for('second_route', _external=True), data=data)
         
-        return render_template("display_video.html", set=set, teacherid = teacherid, youtubeurl=newurl)
+    return render_template("display_video.html", set=set, teacherid = teacherid, youtubeurl=newurl)
 
     
-    return redirect(url_for('home'))
+   
 
 
 @app.route('/videoQuestions/<teacherid>/<set>/<int:number>', methods=['GET','POST'])
 def videoQuestions(teacherid, set, number):
-  
+    loggedIn, subscribed, teacherId = checkPermissions()
     print(teacherid)
     print(set)
     print(number)
@@ -2422,7 +2423,7 @@ def videoQuestions(teacherid, set, number):
                 print(question)
                 # session["questionnumber"].append(number)
                 print(f"current question: {number} ")
-                return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+                return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
                 
     elif request.method == "GET":
         
@@ -2434,7 +2435,7 @@ def videoQuestions(teacherid, set, number):
                 # return redirect(url_for('home'))
                 session["questionnumber"] = number
                 question = questions[number]
-                return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+                return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
             else:
                 # number += 1
                 print("returning to questions after game")
@@ -2460,7 +2461,7 @@ def videoQuestions(teacherid, set, number):
     
             print(question)
             print(f"first question:{number}")
-            return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+            return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
     
 
     
