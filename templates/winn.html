@@ -1,7 +1,6 @@
 {% include 'header.html' %}
 
 
-
 <!-- Content section-->
 <!-- <section class="py-5"> -->
 <div id="show" class="container mx-auto">
@@ -15,7 +14,9 @@
 
                   </div>
               <div class="col-sm-10 embed-responsive embed-responsive-16by9 text-center pagination-centered">
-                <iframe class="embed-responsive-item text-center pagination-centered" src="./coinDash/index.html" allowfullscreen frameborder='0'></iframe>
+                  
+                  <iframe width="470" height="402" src="https://edpuzzle.com/embed/assignments/66fe974fa6129ff2320ecc83/watch" frameborder="0" allowfullscreen></iframe>
+                  
                   <!-- <button class="btn btn-warning" type="button" onclick="fullScreen()">Full Screen</button> -->
 
               </div>
@@ -25,24 +26,7 @@
 
             </div>
         </div>
- <div id="noshow" class="container mx-auto">
-  
-     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-          <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('videoQuestions', teacherid=teacherid, set=set, number=number) }}';">Return to Questions</button>
 
-        </div>
- </div>
-
-<script>
-setTimeout(function() {
-
-      window.location.href = "{{ url_for('videoQuestions', teacherid=teacherid, set=set, number=number) }}";
-    
-      
-    });
-}, 30000); 
-
-</script>
 
 
         <!-- Bootstrap core JS-->

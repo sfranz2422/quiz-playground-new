@@ -26,6 +26,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 
 FILE_TO_DELETE = ""
 
+
 # from flask_mail import Mail, Message
 from twilio.rest import Client as TC
 # from mailersend import emails
@@ -613,7 +614,7 @@ def home():
     # for _ in range(10):
     #     print(get_random_string())
 
-    
+    session.pop('questionnumber', None)
     loggedIn, subscribed, teacherId = checkPermissions()
 
     return render_template("index.html",
@@ -2361,6 +2362,7 @@ def add_question_to_csv(question):
 
 @app.route('/getVideo/<path:youtubeurl>/<teacherid>/<set>')
 def getVideo(youtubeurl, teacherid, set):
+    session.pop('questionnumber', None)
     print(unquote(youtubeurl))
     print(teacherid)
     print(set)
@@ -2378,31 +2380,92 @@ def getVideo(youtubeurl, teacherid, set):
     return redirect(url_for('home'))
 
 
-@app.route('/videoQuestions/<teacherid>/<set>/<int:number>')
+@app.route('/videoQuestions/<teacherid>/<set>/<int:number>', methods=['GET','POST'])
 def videoQuestions(teacherid, set, number):
-
+  
     print(teacherid)
     print(set)
     print(number)
     print(type(number))
-    
-    
-    
-    loggedIn, subscribed, teacherId = checkPermissions()
-    if loggedIn == True and subscribed == True:
-        # response = requests.post(url_for('second_route', _external=True), data=data)
-        questions = getQuestionSet(set)
-
+    msg=""
+    if request.method == "POST":
+        questions = session["questions"]
+        questionid =  request.form['correctanswer']
+        questionsettitle = request.form['questionsettitle']
+        questiontext = request.form['questiontext']
+        if request.form['answer'] == request.form['correctanswer']:
+            print("correct answer chosen!")
+            #go to a random game
+            msg = "Correct!"
+            # $HTTPRequest.request("https://quizplayground.com/recordAnswer/"+str(question["id"])+"/"+str(c)+"/"+str(i)+"/"+str(teacherCode)+"/"+question["quizid"]+"/"+str(title)+"/"+str(qt))
+            requests.get(f"https://quizplayground.com/recordAnswer/{questionid}/1/0/{teacherid}/{set}/{questionsettitle}/{questiontext}")
+            # flash("Correct!")
+            # return redirect(url_for('coinDash'))
         
+        else:
+            print("Sorry wrong choice")
+            requests.get(f"https://quizplayground.com/recordAnswer/{questionid}/0/1/{teacherid}/{set}/{questionsettitle}/{questiontext}")
 
-        question = random.choice(questions)
-        # print(questions)
-        number = question[0]["questionnumber"]
-        print("New number " + str(number))
+            # flash("Sorry wrong choice")
+            msg = "Sorry, that's incorrect!"
 
+        if "questionnumber" in session:
+            number = session["questionnumber"] 
+            if number+1 == len(questions):
+                print("List is at the end")
+                return redirect(url_for('home'))
+            else:
+                print("in post and increasing question number")
+                number += 1
+                session["questionnumber"] = number
+                question = questions[number]
+                print(question)
+                # session["questionnumber"].append(number)
+                print(f"current question: {number} ")
+                return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+                
+    elif request.method == "GET":
         
+        if "questionnumber" in session:
+            questions = session["questions"]
+            number = session["questionnumber"] 
+            if number+1 == len(questions):
+                print("returniing from game..")
+                # return redirect(url_for('home'))
+                session["questionnumber"] = number
+                question = questions[number]
+                return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+            else:
+                # number += 1
+                print("returning to questions after game")
+                session["questionnumber"] = number
+                question = questions[number]
+                print(question)
+                # session["questionnumber"].append(number)
+                print(f"current question: {number} ")
+                return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+        else:     
+            questions = getQuestionSet(set)
+            print("visiting first question for the first time")
+            session.pop('questionnumber', None)
+            random.shuffle(questions)
+            print(questions)
+            # number = questions[0][0]["questionnumber"]
+    
+            number = 0
+            session["questionnumber"] = number
+            session["questions"] = questions
+            # session["quizQuestionNumber"] = [number]
+            question = questions[number]
+    
+            print(question)
+            print(f"first question:{number}")
+            return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+    
 
-        return render_template("videoQuestions.html", question=question, questions = questions, number = number)
+    
+
+
 
 
     return redirect(url_for('home'))
@@ -2418,20 +2481,27 @@ def embed_url(video_url):
 
 @app.route('/coinDash',methods=["GET", "POST"])
 def coinDash():
-    id = "None"
-    result = "None"
-    if request.method == "POST" and 'quizId' in request.form:
-        id = request.form['quizId']
-        result = getQuestionSet(id)
-        print(result)
+
+    if request.method == "POST" and 'teacherid' in request.form:
+        teacherid = request.form['teacherid']
+        set = request.form['set']
+        number = request.form['number']
+
     loggedIn, subscribed, teacherId = checkPermissions()
     response = make_response(
-        render_template('coinDash.html', subscribed=subscribed, result=result))
+        render_template('coinDash.html', subscribed=subscribed, teacherid=teacherid, set=set, number=number))
 
     response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
     # return redirect(url_for("coinDashGame", name='index.html'))
+
+
+@app.route('/winn')
+def winn():
+   
+
+    return render_template("winn.html")
 
 
 

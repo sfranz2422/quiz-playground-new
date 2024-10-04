@@ -142,7 +142,7 @@ function setupPlayer() {
   hero.width = 40;
   hero.height = 40;
   hero.scale = 2.5;
-  hero.debug = true
+  // hero.debug = true
   hero.removeColliders();
   hero.addCollider(0, 0, 50, 50);
   hero.friction = 0;
@@ -330,6 +330,7 @@ function playerEnemyCollision() {
   if (enemy.overlapping(hero)) {
     deadSound.play();
     gameOver();
+    window.location.href = "{{ url_for('videoQuestions') }}";
   }
 }
 function myTimer() {

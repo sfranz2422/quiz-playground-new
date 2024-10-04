@@ -23,29 +23,57 @@
                   <div class="card mb-4">
                     <div class="card-body">
                       <h5 class="card-title">{{question[0]['questiontext']}}</h5>
-                      <form>
+                      <form id="hide" action="{{ url_for('videoQuestions', teacherid=teacherid, set=set, number=number) }}" method="post">
                         <div class="form-check">
-                          <input class="form-check-input" type="radio" name="question1" id="q1option1" value="1">
+                          <input class="form-check-input" type="radio" name="answer" id="q1option1" value="1">
                           <label class="form-check-label" for="q1option1">{{question[0]['answer1']}}</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="radio" name="question1" id="q1option2" value="2">
+                          <input class="form-check-input" type="radio" name="answer" id="q1option2" value="2">
                           <label class="form-check-label" for="q1option2">{{question[0]['answer2']}}</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="radio" name="question1" id="q1option3" value="3">
+                          <input class="form-check-input" type="radio" name="answer" id="q1option3" value="3">
                           <label class="form-check-label" for="q1option3">{{question[0]['answer3']}}</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="radio" name="question1" id="q1option4" value="4">
+                          <input class="form-check-input" type="radio" name="answer" id="q1option4" value="4">
                           <label class="form-check-label" for="q1option4">{{question[0]['answer4']}}</label>
                         </div>
+<input type="hidden" name="correctanswer" value="{{ question[0]['correctanswer'] }}">
+                        <input type="hidden" name="questionid" value="{{ question[0]['id'] }}">
+                        <input type="hidden" name="questionsettitle" value="{{ question[0]['questionsettitle'] }}">
+                        <input type="hidden" name="questiontext" value="{{ question[0]['questiontext'] }}">
+
+                        
+                        <br>
+                        <br>
+                        
+
+
+                        
+
+<br>
+                         <button id="click" type="submit" class="btn btn-warning btn-lg px-4 gap-3">Submit</button>
+                        
+                      </form>
+                      <h3>
+                        <small class="text-danger flash-message">{{ msg }}</small>
+                      </h3>
+                      <form id="minigamebutton" method="POST" action="{{ url_for('coinDash') }}">
+                        <input type="hidden" value="{{ teacherid }}" name="teacherid">
+                         <input type="hidden" value="{{ set }}" name="set">
+                         <input type="hidden" value="{{ number }}" name="number">
+                        <input  class="btn btn-warning btn-lg px-4 gap-3" type="submit" value="Play A Mini Game">
                       </form>
                     </div>
                   </div>
 
-{{number}}
 
+                      <br>
+
+                      <br>
+                {{number}}
 
                             <!-- <div class="text-center">
                               <button type="submit" class="btn btn-primary">Submit Answer</button>
@@ -54,13 +82,13 @@
 
 
 
-
+<!-- 
                           <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
                             <button type="button" class="btn btn-warning btn-lg px-4 gap-3" onclick="window.location.href='{{ url_for('games') }}';">Submit Answer</button>
 
-                          </div>
+                          </div> -->
 
-                        
+                    
 
 
                         
@@ -87,7 +115,36 @@
         </div> -->
  </div>
 
+<script>
 
+    var form = document.getElementById("hide");
+    form.style.visibility = "hidden";
+
+  var minigamebutton = document.getElementById("minigamebutton");
+  minigamebutton.style.visibility = "hidden";
+  
+  
+    setTimeout(function() {
+        var messages = document.querySelectorAll('.flash-message');
+        messages.forEach(function(message) {
+            message.classList.add('hidden');
+          var form = document.getElementById("hide");
+          form.style.visibility = "visible";
+          var message = {{ msg | tojson }}
+          if (message == "Correct!"){
+          // window.location.href = "{{ url_for('coinDash', teacherid=teacherid, set=set, number=number) }}";
+          var minigamebutton = document.getElementById("minigamebutton");
+          minigamebutton.style.visibility = "visible";
+          console.log("correct answer")
+          }
+          else{
+            var minigamebutton = document.getElementById("minigamebutton");
+            minigamebutton.style.visibility = "hidden";
+          }
+          
+        });
+    }, 3000); 
+</script>
         <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Core theme JS-->
@@ -95,3 +152,4 @@
         <script src="{{ url_for('static', filename='js/scripts.js')}}"></script>
     </body>
 </html>
+
