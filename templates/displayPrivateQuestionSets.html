@@ -13,11 +13,16 @@
                   
 
 
-                    <h5>
-                      <small class="text-muted">Use any of these quizzes in any game.</small>
-                    </h5>
 
-     <p>           <a class="link-danger text-decoration-none" href="{{ url_for('addNewQuiz') }}">New Quiz</a></p>
+                  <h5>
+                    <small class="text-danger">New Feature!</small><small> Share the Student Activity Link with your students on Google Classroom.  Students will be shown the YouTube video associated with the quiz and will then be presented with the quiz questions.  Correct answers will be rewarded with a random mini game.  The results will be reported to your teacher dashboard just like any other quiz.</small>
+                  </h5>
+                  <br>
+                  <h5>
+                    <small>Present the Student Instructions on your board to help students use your quiz in one the games on the site.</small>
+                  </h5>
+                  <br>
+                  <br>
 
                     <table id="data" class="table">
                       <thead>
@@ -25,9 +30,10 @@
                           <th scope="col" class="col-2"></th>
                           <th scope="col">Title</th>
                           <th scope="col">Description</th>
-                          <th scope="col"></th>
+                          <th scope="col">Student Activity Link</th>
                              <th scope="col"></th>
-                           <th scope="col"></th>
+                     
+                          <th scope="col"></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -54,13 +60,15 @@
                           <td>{{ quiz[1] }}</td>
                           <td class="text-wrap">{{ quiz[2] }}</td>
 
-{% if quiz[4] %}
+                          {% if quiz[4] %}
 
-                             <td> <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('getVideo', youtubeurl = quiz[4], teacherid = quiz[5],set = quiz[0] ) }}';">Make Lesson</button>  </td>
-                            {% else %}
-                             <td>  </td>
-                            
-                            {% endif %}
+                           <td> <a href="{{ url_for('getVideo', youtubeurl = quiz[4], teacherid = quiz[5],set = quiz[0] ) }}">https://quizplayground.com/{{ url_for('getVideo', youtubeurl = quiz[4], teacherid = quiz[5],set = quiz[0] ) }}</a> </td>
+                          {% else %}
+                           <td>  </td>
+
+                          {% endif %}
+
+
                             
                           <td> <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url_for('assignQuiz', quizid = quiz[0]) }}';">Student Instructions</button>  </td>
 

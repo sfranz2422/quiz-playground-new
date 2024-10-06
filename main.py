@@ -808,7 +808,13 @@ def coinDashGame(name):
     response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
     response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
     return response
-
+    
+@app.route("/pong/<path:name>")
+def pongGame(name):
+    response = send_from_directory(f'./pong', name)
+    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+    return response
 
 @app.route('/edit_one_question/<id>')
 def edit_one_question(id):
@@ -2384,6 +2390,7 @@ def getVideo(youtubeurl, teacherid, set):
 @app.route('/videoQuestions/<teacherid>/<set>/<int:number>', methods=['GET','POST'])
 def videoQuestions(teacherid, set, number):
     loggedIn, subscribed, teacherId = checkPermissions()
+    randomGame = random.randint(1, 2)
     print(teacherid)
     print(set)
     print(number)
@@ -2423,7 +2430,7 @@ def videoQuestions(teacherid, set, number):
                 print(question)
                 # session["questionnumber"].append(number)
                 print(f"current question: {number} ")
-                return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+                return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg, randomGame=randomGame)
                 
     elif request.method == "GET":
         
@@ -2435,7 +2442,7 @@ def videoQuestions(teacherid, set, number):
                 # return redirect(url_for('home'))
                 session["questionnumber"] = number
                 question = questions[number]
-                return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+                return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg,randomGame=randomGame)
             else:
                 # number += 1
                 print("returning to questions after game")
@@ -2444,7 +2451,7 @@ def videoQuestions(teacherid, set, number):
                 print(question)
                 # session["questionnumber"].append(number)
                 print(f"current question: {number} ")
-                return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+                return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg,randomGame=randomGame)
         else:     
             questions = getQuestionSet(set)
             print("visiting first question for the first time")
@@ -2461,7 +2468,7 @@ def videoQuestions(teacherid, set, number):
     
             print(question)
             print(f"first question:{number}")
-            return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg)
+            return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg,randomGame=randomGame)
     
 
     
@@ -2487,16 +2494,38 @@ def coinDash():
         teacherid = request.form['teacherid']
         set = request.form['set']
         number = request.form['number']
+    
+        loggedIn, subscribed, teacherId = checkPermissions()
+        response = make_response(
+            render_template('coinDash.html', subscribed=subscribed, teacherid=teacherid, set=set, number=number))
+    
+        response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+        response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+        return response
+        # return redirect(url_for("coinDashGame", name='index.html'))
 
-    loggedIn, subscribed, teacherId = checkPermissions()
-    response = make_response(
-        render_template('coinDash.html', subscribed=subscribed, teacherid=teacherid, set=set, number=number))
+    else:
+        return redirect(url_for('home'))
 
-    response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
-    response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
-    return response
+@app.route('/pong',methods=["GET", "POST"])
+def pong():
+
+    if request.method == "POST" and 'teacherid' in request.form:
+        teacherid = request.form['teacherid']
+        set = request.form['set']
+        number = request.form['number']
+
+        loggedIn, subscribed, teacherId = checkPermissions()
+        response = make_response(
+            render_template('pong.html', subscribed=subscribed, teacherid=teacherid, set=set, number=number))
+    
+        response.headers.add('Cross-Origin-Opener-Policy', 'same-origin')
+        response.headers.add('Cross-Origin-Embedder-Policy', 'require-corp')
+        return response
+    else:
+        return redirect(url_for('home'))
+
     # return redirect(url_for("coinDashGame", name='index.html'))
-
 
 @app.route('/winn')
 def winn():
