@@ -2550,6 +2550,14 @@ def questionsComplete(set, teacherid):
     return render_template("questionsComplete.html", set=set, teacherid=teacherid)
 
 
+@app.route('/pongTemplate')
+def pongTemplate():
+    # take in set and teacher id and grab questions
+
+    return render_template("pongTemplate.html")
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
