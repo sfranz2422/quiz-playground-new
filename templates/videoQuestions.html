@@ -57,15 +57,19 @@
                          <button id="click" type="submit" class="btn btn-warning btn-lg px-4 gap-3">Submit</button>
                         
                       </form>
+                         <h3>
+                           <small class="text-success flash-message">{{ errormsg }}</small>
+                         </h3>
+                 
                          {% if msg=='Correct!' %}
-                      <h3>
-                        <small class="text-success flash-message">{{ msg }}</small>
-                      </h3>
+                   
+                        <h2 class="text-success flash-message">{{ msg }}</h2>
+              
                         {% else %}
 
-                         <h3>
-                           <small class="text-danger flash-message">{{ msg }}</small>
-                         </h3>
+                      
+                           <h2 class="text-danger flash-message">{{ msg }}</h2>
+                    
                          {% endif %}
                          
                       {% if randomGame == 1 %}

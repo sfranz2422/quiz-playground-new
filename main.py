@@ -2389,6 +2389,7 @@ def getVideo(youtubeurl, teacherid, set):
 
 @app.route('/videoQuestions/<teacherid>/<set>/<int:number>', methods=['GET','POST'])
 def videoQuestions(teacherid, set, number):
+    
     loggedIn, subscribed, teacherId = checkPermissions()
     randomGame = random.randint(1, 2)
     print(teacherid)
@@ -2396,7 +2397,8 @@ def videoQuestions(teacherid, set, number):
     print(number)
     print(type(number))
     msg=""
-    if request.method == "POST":
+    if request.method == "POST" and 'answer' in request.form:
+        errormsg = ""
         questions = session["questions"]
         questionid =  request.form['correctanswer']
         questionsettitle = request.form['questionsettitle']
@@ -2415,13 +2417,13 @@ def videoQuestions(teacherid, set, number):
             requests.get(f"https://quizplayground.com/recordAnswer/{questionid}/0/1/{teacherid}/{set}/{questionsettitle}/{questiontext}")
 
             # flash("Sorry wrong choice")
-            msg = "Sorry, that's incorrect!"
+            msg = "Incorrect!"
 
         if "questionnumber" in session:
             number = session["questionnumber"] 
             if number+1 == len(questions):
                 print("List is at the end")
-                return redirect(url_for('home'))
+                return redirect(url_for('questionsComplete', set=set, teacherid=teacherid))
             else:
                 print("in post and increasing question number")
                 number += 1
@@ -2430,7 +2432,8 @@ def videoQuestions(teacherid, set, number):
                 print(question)
                 # session["questionnumber"].append(number)
                 print(f"current question: {number} ")
-                return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg, randomGame=randomGame)
+                errormsg = ""
+                return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg, randomGame=randomGame, errormsg=errormsg)
                 
     elif request.method == "GET":
         
@@ -2442,7 +2445,8 @@ def videoQuestions(teacherid, set, number):
                 # return redirect(url_for('home'))
                 session["questionnumber"] = number
                 question = questions[number]
-                return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg,randomGame=randomGame)
+                errormsg = ""
+                return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg,randomGame=randomGame, errormsg=errormsg)
             else:
                 # number += 1
                 print("returning to questions after game")
@@ -2451,7 +2455,8 @@ def videoQuestions(teacherid, set, number):
                 print(question)
                 # session["questionnumber"].append(number)
                 print(f"current question: {number} ")
-                return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg,randomGame=randomGame)
+                errormsg = ""
+                return render_template("videoQuestions.html", question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg,randomGame=randomGame, errormsg=errormsg)
         else:     
             questions = getQuestionSet(set)
             print("visiting first question for the first time")
@@ -2468,15 +2473,19 @@ def videoQuestions(teacherid, set, number):
     
             print(question)
             print(f"first question:{number}")
-            return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg,randomGame=randomGame)
+            errormsg = ""
+            return render_template("videoQuestions.html",question=question, questions = questions, number = number, teacherid=teacherid, set=set, msg=msg,randomGame=randomGame, errormsg=errormsg)
     
 
-    
+    else:
+        errormsg = "You must select an answer"
+        return redirect(url_for('videoQuestions',teacherid=teacherid, set=set, number=number))
 
 
 
 
-    return redirect(url_for('home'))
+
+
 
 
 
@@ -2533,6 +2542,12 @@ def winn():
 
     return render_template("winn.html")
 
+
+@app.route('/questionsComplete/<set>/<teacherid>')
+def questionsComplete(set, teacherid):
+
+
+    return render_template("questionsComplete.html", set=set, teacherid=teacherid)
 
 
 if __name__ == '__main__':
