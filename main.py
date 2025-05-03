@@ -2556,6 +2556,45 @@ def pongTemplate():
 
     return render_template("pongTemplate.html")
 
+@app.route('/formProjectReceive',methods=["GET", "POST"])
+def formProjectReceive():
+    # take in set and teacher id and grab questions
+    if request.method == "POST":
+
+        
+        first = request.form['first']
+        last = request.form['last']
+        email = request.form['email']
+        password = request.form['password']
+        account_type = request.form['account-type']
+        age = request.form['age']
+        referrer = request.form['referrer']
+        bio = request.form['bio']
+
+
+        salt = password + "alksfjlakjf092384lksj$%$G"
+        salt = salt.encode()
+        password = hashlib.sha256(salt).hexdigest()
+
+
+        
+        data = {
+            "first":first,
+            "last":last,
+            "email":email,
+            "password":password,
+            "account_type":account_type,
+            "picture":picture,
+            "age":age,
+            "referrer":referrer,
+            "bio":bio
+        }
+
+
+    
+        return render_template("formProjectReceive.html", data=data)
+    data = "No data sent"
+    return render_template("formProjectReceive.html", data=data)
 
 
 if __name__ == '__main__':
