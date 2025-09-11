@@ -1,3 +1,4 @@
+import setup_database
 from flask import Flask, render_template, send_from_directory, url_for, redirect, render_template, request, flash, send_from_directory, send_file, jsonify, make_response, session
 from werkzeug.utils import secure_filename
 from csv import DictReader
@@ -32,14 +33,32 @@ from twilio.rest import Client as TC
 # from mailersend import emails
 
 client = Client()
-# import psycopg2.pool
+# import pg80002.pool
 # pool = psycopg2.pool.SimpleConnectionPool(0, 80, os.environ['DATABASE_URL'])
+
+# Add urllib.parse import for URL parsing
+import urllib.parse as up
+
+# Database connection helper function
+def get_db_connection():
+    url = os.environ['DATABASE_URL']
+    p = up.urlparse(url)
+    database_name = p.path[1:] if p.path and len(p.path) > 1 else 'neondb'
+    
+    return pg8000.connect(
+        host=p.hostname,
+        port=p.port or 5432,
+        database=database_name,
+        user=p.username,
+        password=p.password,
+        ssl_context=True
+    )
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'csv'}
 # DOWNLOAD_FOLDER = 'download'
 
-import psycopg
+import pg8000
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['APP_SECRET']
@@ -78,7 +97,7 @@ twilioClient = TC(account_sid, auth_token)
 # Create a cursor using the connection
 # cur = conn.cursor()
 
-# with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+# with get_db_connection() as conn:
 #     with conn.cursor() as cur:
 #         cur.execute("""
 #             SELECT * FROM users;
@@ -147,6 +166,9 @@ twilioClient = TC(account_sid, auth_token)
 #     """
 # )
 
+setup_database.setup_database()
+
+
 @app.route('/downloadv2')
 def download_filev2():
     path = "quiz_playground_template.csv"
@@ -194,10 +216,7 @@ def get_random_string():
         r = random.randint(0, 7)
         code += num[r]
         
-        with psycopg.connect(host=os.environ['PGHOST'],
-             dbname=os.environ['PGDATABASE'],
-             user=os.environ['PGUSER'],
-             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "SELECT * FROM quizids WHERE quizId = %s"
                 data = (code, )
@@ -210,10 +229,7 @@ def get_random_string():
     
                 else:
                     keep_going = False
-                    with psycopg.connect(host=os.environ['PGHOST'],
-                         dbname=os.environ['PGDATABASE'],
-                         user=os.environ['PGUSER'],
-                         password=os.environ['PGPASSWORD']) as conn:
+                    with get_db_connection() as conn:
                         with conn.cursor() as cur:
             
 
@@ -230,10 +246,7 @@ def get_random_string():
 
 def getDatabaseConnection(query):
 
-    with psycopg.connect(host=os.environ['PGHOST'],
-                         dbname=os.environ['PGDATABASE'],
-                         user=os.environ['PGUSER'],
-                         password=os.environ['PGPASSWORD']) as conn:
+    with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(query)
             list = cur.fetchall()
@@ -302,7 +315,7 @@ def getDatabaseConnection(query):
 def get_private_question_sets(teacherId):
 
 
-    with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
+    with get_db_connection() as conn:
         with conn.cursor() as cur:
             # SQL = "SELECT DISTINCT quizId, questionSetTitle, questionSetDescription FROM complete_questions WHERE teacherId = %s ORDER BY questionSetTitle"
             SQL = "SELECT DISTINCT ON (questionSetTitle, quizId) quizId, questionSetTitle, questionSetDescription, timestamp, youtubeurl, teacherid FROM complete_questions WHERE teacherId = %s ORDER BY questionSetTitle, quizId"
@@ -333,7 +346,7 @@ def get_all_question_sets():
 def getOneQuestionSet(questionSetId):
 
 
-    with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
+    with get_db_connection() as conn:
         with conn.cursor() as cur:
             SQL = "SELECT * FROM complete_questions WHERE quizId = %s ORDER BY questionNumber, id DESC"
             data = (questionSetId, )
@@ -399,10 +412,7 @@ def upload_file():
 
      
 
-            with psycopg.connect(host=os.environ['PGHOST'],
-                                 dbname=os.environ['PGDATABASE'],
-                                 user=os.environ['PGUSER'],
-                                 password=os.environ['PGPASSWORD']) as conn:
+            with get_db_connection() as conn:
                 for question in listOfQuestions:
                     with conn.cursor() as cur:
                         cur.execute(
@@ -441,7 +451,7 @@ def json_to_string(file):
 @app.route('/getQuestionSet/<set>')
 def getQuestionSet(set):
 
-    with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
+    with get_db_connection() as conn:
         with conn.cursor() as cur:
             SQL = "SELECT row_to_json(complete_questions) FROM complete_questions WHERE quizid = %s;"
             data = (set, )
@@ -577,7 +587,7 @@ def copy(quizid):
 
         dbname = makeRandomTableName()
         
-        with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = f"CREATE table {dbname} AS SELECT * FROM complete_questions WHERE quizid = %s"
                 data = (quizid, )
@@ -888,10 +898,7 @@ def register():
         salt = salt.encode()
         password = hashlib.sha256(salt).hexdigest()
 
-        with psycopg.connect(host=os.environ['PGHOST'],
-                             dbname=os.environ['PGDATABASE'],
-                             user=os.environ['PGUSER'],
-                             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "SELECT * FROM users WHERE email = %s AND password = %s LIMIT 1"
                 data = (
@@ -929,10 +936,7 @@ def register():
             now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             ip = request.environ['REMOTE_ADDR']
 
-            with psycopg.connect(host=os.environ['PGHOST'],
-                                 dbname=os.environ['PGDATABASE'],
-                                 user=os.environ['PGUSER'],
-                                 password=os.environ['PGPASSWORD']) as conn:
+            with get_db_connection() as conn:
                 with conn.cursor() as cur:
                     # cur.execute(f"INSERT INTO users (email, password,subscribed, key, tfa, thedate, ip, phone) VALUES ('{email}', '{password}', '{subscribed}','{key}','{tfa}','{now}','{ip}','{phone}')")
 
@@ -956,10 +960,7 @@ def register():
             # query = f"SELECT * FROM users WHERE email = '{email}' AND password = '{password}' LIMIT 1"
             # r = getDatabaseConnection(query)
 
-            with psycopg.connect(host=os.environ['PGHOST'],
-                                 dbname=os.environ['PGDATABASE'],
-                                 user=os.environ['PGUSER'],
-                                 password=os.environ['PGPASSWORD']) as conn:
+            with get_db_connection() as conn:
                 with conn.cursor() as cur:
                     SQL = "SELECT * FROM users WHERE email = %s AND password = %s LIMIT 1"
                     data = (
@@ -1071,10 +1072,7 @@ def forgotpassword():
     msg = ""
     if request.method == "POST" and 'email' in request.form and 'token' in request.form:
         email = request.form['email']
-        with psycopg.connect(host=os.environ['PGHOST'],
-             dbname=os.environ['PGDATABASE'],
-             user=os.environ['PGUSER'],
-             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "SELECT * FROM users WHERE email = %s"
                 data = (email, )
@@ -1113,10 +1111,7 @@ def twofactorpassword():
     session['token'] = token
     msg = ""
     email = session['username']
-    with psycopg.connect(host=os.environ['PGHOST'],
-         dbname=os.environ['PGDATABASE'],
-         user=os.environ['PGUSER'],
-         password=os.environ['PGPASSWORD']) as conn:
+    with get_db_connection() as conn:
         with conn.cursor() as cur:
             SQL = "SELECT * FROM users WHERE email = %s"
             data = (email, )
@@ -1177,10 +1172,7 @@ def newpassword():
         newpass = hashlib.sha256(salt).hexdigest()
 
         
-        with psycopg.connect(host=os.environ['PGHOST'],
-             dbname=os.environ['PGDATABASE'],
-             user=os.environ['PGUSER'],
-             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "UPDATE users SET password = %s WHERE email = %s"
                 data = (newpass, email, )
@@ -1198,10 +1190,7 @@ def confirmation(checkout_session_id):
     # print(checkout_session_id)
     if checkout_session_id:
         teacherId = session['id']
-        with psycopg.connect(host=os.environ['PGHOST'],
-                             dbname=os.environ['PGDATABASE'],
-                             user=os.environ['PGUSER'],
-                             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "SELECT * FROM users WHERE teacherid = %s"
                 data = (teacherId, )
@@ -1211,10 +1200,7 @@ def confirmation(checkout_session_id):
 
                 # print("the db lookup")
                 # print(list)
-        with psycopg.connect(host=os.environ['PGHOST'],
-                             dbname=os.environ['PGDATABASE'],
-                             user=os.environ['PGUSER'],
-                             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "UPDATE users SET subscribed = %s WHERE teacherid = %s"
                 data = (
@@ -1231,10 +1217,7 @@ def confirmation(checkout_session_id):
         # set session cookies
         return redirect(url_for('account'))
     else:
-        with psycopg.connect(host=os.environ['PGHOST'],
-                             dbname=os.environ['PGDATABASE'],
-                             user=os.environ['PGUSER'],
-                             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "DELETE FROM users WHERE teacherid = %s"
                 data = (teacherId, )
@@ -1248,7 +1231,7 @@ def confirmation(checkout_session_id):
 
 def getOneQuestion(id):
 
-    with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
+    with get_db_connection() as conn:
         with conn.cursor() as cur:
             SQL = "SELECT * FROM complete_questions WHERE id = %s"
             data = (id, )
@@ -1302,10 +1285,7 @@ def editSubmit():
 
         # cur = getDatabaseConnection()
 
-        with psycopg.connect(host=os.environ['PGHOST'],
-                             dbname=os.environ['PGDATABASE'],
-                             user=os.environ['PGUSER'],
-                             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "UPDATE complete_questions SET questionText = %s WHERE id = %s;"
                 Data = (questionText, id, )
@@ -1359,10 +1339,7 @@ def togglePrivacyOn(quizId):
 
     if loggedIn == True and subscribed == True:
 
-        with psycopg.connect(host=os.environ['PGHOST'],
-                             dbname=os.environ['PGDATABASE'],
-                             user=os.environ['PGUSER'],
-                             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "UPDATE complete_questions SET questionsetprivate = '1' WHERE quizId = %s;"
                 Data = (quizId, )
@@ -1380,10 +1357,7 @@ def togglePrivacyOff(quizId):
     loggedIn, subscribed, teacherId = checkPermissions()
 
     if loggedIn == True and subscribed == True:
-        with psycopg.connect(host=os.environ['PGHOST'],
-                             dbname=os.environ['PGDATABASE'],
-                             user=os.environ['PGUSER'],
-                             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "UPDATE complete_questions SET questionsetprivate = '0' WHERE quizId = %s;"
                 Data = (quizId, )
@@ -1450,7 +1424,7 @@ def csv_to_dict(path, questionSetTitle, questionSetDescription,
 
 
 # def getOneUser(email, password):
-#     with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
+#     with get_db_connection() as conn:
 #         with conn.cursor() as cur:
 #             SQL = "SELECT * FROM users WHERE email = %s AND password = %s LIMIT 1"
 #             data = (email, password, )
@@ -1465,10 +1439,7 @@ def csv_to_dict(path, questionSetTitle, questionSetDescription,
 
 
 def bruteForce(email,ip):
-    with psycopg.connect(host=os.environ['PGHOST'],
-         dbname=os.environ['PGDATABASE'],
-         user=os.environ['PGUSER'],
-         password=os.environ['PGPASSWORD']) as conn:
+    with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "SELECT * FROM login_attempts WHERE ip = %s AND email = %s LIMIT 1"
                 data = (ip, email, )
@@ -1480,10 +1451,7 @@ def bruteForce(email,ip):
                 if not r:
                  
                     attempts = 1
-                    with psycopg.connect(host=os.environ['PGHOST'],
-                         dbname=os.environ['PGDATABASE'],
-                         user=os.environ['PGUSER'],
-                         password=os.environ['PGPASSWORD']) as conn:
+                    with get_db_connection() as conn:
                             with conn.cursor() as cur:
                                 SQL = "INSERT INTO login_attempts (ip, email, attempts) VALUES (%s,%s,%s);"
                                 data = (ip, email, attempts)
@@ -1496,10 +1464,7 @@ def bruteForce(email,ip):
                    
                     new_attempts = r[3] + 1
                     if new_attempts <= 5:
-                        with psycopg.connect(host=os.environ['PGHOST'],
-                             dbname=os.environ['PGDATABASE'],
-                             user=os.environ['PGUSER'],
-                             password=os.environ['PGPASSWORD']) as conn:
+                        with get_db_connection() as conn:
                                 with conn.cursor() as cur:
                                     SQL = "UPDATE login_attempts SET attempts = %s WHERE ip = %s"
                                     data = (new_attempts, ip)
@@ -1517,10 +1482,7 @@ def bruteForce(email,ip):
         
 def clearEmail(email,ip):
     try:
-        with psycopg.connect(host=os.environ['PGHOST'],
-             dbname=os.environ['PGDATABASE'],
-             user=os.environ['PGUSER'],
-             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
                 with conn.cursor() as cur:
                     SQL = "DELETE FROM login_attempts WHERE ip = %s and email = %s"
                     data = (ip, email, )
@@ -1545,10 +1507,7 @@ def login():
         salt = salt.encode()
         password = hashlib.sha256(salt).hexdigest()
 
-        with psycopg.connect(host=os.environ['PGHOST'],
-                             dbname=os.environ['PGDATABASE'],
-                             user=os.environ['PGUSER'],
-                             password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "SELECT * FROM users WHERE email = %s AND password = %s LIMIT 1"
                 data = (
@@ -1651,7 +1610,7 @@ def myresults():
         username = session['username']
     if loggedIn == True and subscribed == True:
 
-        with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "SELECT DISTINCT ON (quizid) quizid, quiztitle, teacherid, questionid, correct, id FROM results WHERE teacherId = %s"
                 data = (teacherId, )
@@ -1720,7 +1679,7 @@ def addQuestionForm():
             questionText = request.form['questionText']
 
 
-            with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+            with get_db_connection() as conn:
                 with conn.cursor() as cur:
                     SQL = "SELECT * FROM complete_questions WHERE quizId = %s AND teacherid = %s"
                     data = (quizId, teacherId,  )
@@ -1756,7 +1715,7 @@ def addQuestionForm():
                 else:
                     answer4 = "blank"
             
-                with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+                with get_db_connection() as conn:
                     with conn.cursor() as cur:
                         SQL = "INSERT INTO complete_questions (quizid, questionnumber, questiontext, answer1, answer2, answer3, answer4, correctanswer, questionsettitle, questionsetdescription, questionsetprivate, teacherid, subject) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
                         data = (quizId,questionnumber,  questionText, answer1, answer2, answer3, answer4, correctAnswer, questionssettitle, questionsetdescription, questionsetprivate, teacherId,subject  )
@@ -1799,7 +1758,7 @@ def addNewQuiz():
             answer4 = "Edit Me"
             correctanswer = "1"
             
-            with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
+            with get_db_connection() as conn:
                 with conn.cursor() as cur:
                     SQL = "INSERT INTO complete_questions (quizid, questionsettitle, questionsetdescription, questionsetprivate, teacherid, subject, questionnumber, questiontext, answer1, answer2, answer3, answer4, correctanswer) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
                     data = (quizId,questionsettitle,questionsetdescription,questionsetprivate,teacherid,subject,questionnumber,questiontext, answer1, answer2, answer3,answer4,correctanswer  )
@@ -1839,7 +1798,7 @@ def assignQuiz(quizid):
 def deleteResult(quizid):
     loggedIn, subscribed, teacherId = checkPermissions()
     if loggedIn == True and subscribed == True:
-        with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "DELETE FROM results WHERE quizid = %s AND teacherid = %s;"
                 data = (quizid, teacherId, )
@@ -1858,7 +1817,7 @@ def deleteResult(quizid):
 def deleteQuiz(quizid):
     loggedIn, subscribed, teacherId = checkPermissions()
     if loggedIn == True and subscribed == True:
-        with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "DELETE FROM complete_questions WHERE quizid = %s AND teacherid = %s;"
                 data = (quizid, teacherId, )
@@ -1896,7 +1855,7 @@ def editTitleForm(quizid):
     
     if loggedIn == True and subscribed == True:
 
-        with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "SELECT * FROM complete_questions WHERE quizid = %s"
                 data = (quizid, )
@@ -1910,7 +1869,7 @@ def editTitleForm(quizid):
         if request.method == 'POST' and 'token' in request.form and "quiztitle" in request.form and "quizdescription" in request.form:
             quiztitle = request.form['quiztitle']
             quizdescription = request.form['quizdescription']
-            with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
+            with get_db_connection() as conn:
                 with conn.cursor() as cur:
                     SQL = "UPDATE complete_questions SET questionsettitle = %s, questionsetdescription = %s WHERE quizid = %s;"
                     data = (quiztitle, quizdescription, quizid,  )
@@ -1937,7 +1896,7 @@ def deletejava(quizid):
             if request.form['userInput'] == "True":
 
         
-                with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+                with get_db_connection() as conn:
                     with conn.cursor() as cur:
                         SQL = "DELETE FROM complete_questions WHERE quizid = %s AND teacherid = %s;"
                         data = (quizid, teacherId, )
@@ -1957,7 +1916,7 @@ def deletejava(quizid):
 def deleteQuestion(id, set, teacherId):
     loggedIn, subscribed, teacherId = checkPermissions()
     if loggedIn == True and subscribed == True:
-        with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "DELETE FROM complete_questions WHERE id = %s AND teacherid = %s;"
                 data = (id, teacherId, )
@@ -1978,7 +1937,7 @@ def oneresult(quizid):
     if loggedIn == True and subscribed == True:
         # print(quizid)
       
-        with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD'])    as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "SELECT questiontext, SUM (correct) AS total, SUM (incorrect) AS isum FROM results WHERE teacherId = %s AND quizid = %s GROUP BY questiontext ORDER BY total"
                 data = (teacherId, quizid, )
@@ -2020,10 +1979,7 @@ def recordAnswer(id, correct, incorrect, teacherId, quizid, quiztitle,
 
     # cur = getDatabaseConnection()
 
-    with psycopg.connect(host=os.environ['PGHOST'],
-                         dbname=os.environ['PGDATABASE'],
-                         user=os.environ['PGUSER'],
-                         password=os.environ['PGPASSWORD']) as conn:
+    with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(
                 f"INSERT INTO results (questionId, correct,incorrect, teacherId, quizid, quiztitle,questiontext) VALUES ({questionId}, {correct}, {incorrect},{teacherId},'{quizid}','{quiztitle}','{questiontext}')"
@@ -2221,7 +2177,7 @@ def addQuestionFormYouTube():
             
 
 
-            with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+            with get_db_connection() as conn:
                 with conn.cursor() as cur:
                     SQL = "SELECT * FROM complete_questions WHERE quizId = %s AND teacherid = %s"
                     data = (quizId, teacherId,  )
@@ -2268,7 +2224,7 @@ def addQuestionFormYouTube():
             
 
 
-                    with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+                    with get_db_connection() as conn:
                         with conn.cursor() as cur:
                             SQL = "INSERT INTO complete_questions (quizid, questionnumber, questiontext, answer1, answer2, answer3, answer4, correctanswer, questionsettitle, questionsetdescription, questionsetprivate, teacherid, subject, youtubeurl) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
                             data = (quizId,questionnumber,  questionText, answer1, answer2, answer3, answer4, correctAnswer, questionssettitle, questionsetdescription, questionsetprivate, teacherId,subject,youtubelink  )
@@ -2303,7 +2259,7 @@ def downloadQuizAsCSV(set, teacherid):
     if loggedIn == True and subscribed == True:
 
         
-        with psycopg.connect(host=os.environ['PGHOST'],dbname=os.environ['PGDATABASE'],user=os.environ['PGUSER'],password=os.environ['PGPASSWORD']) as conn:
+        with get_db_connection() as conn:
             with conn.cursor() as cur:
                 SQL = "SELECT * FROM complete_questions WHERE quizId = %s AND teacherid = %s"
                 data = (quizId, teacherId,  )

@@ -16,8 +16,36 @@ run = ["sh", "-c", "python3 main.py"]
 localPort = 5000
 externalPort = 80
 
+[[ports]]
+localPort = 39417
+externalPort = 3000
+
 [objectStorage]
 defaultBucketID = "replit-objstore-b5446f4f-041f-475a-817a-5bc695b0b196"
 
 [agent]
 expertMode = true
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Flask Server"
+
+[[workflows.workflow]]
+name = "Flask Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "gunicorn --bind=0.0.0.0:5000 --reuse-port main:app"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
