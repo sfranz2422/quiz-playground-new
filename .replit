@@ -16,10 +16,6 @@ run = ["gunicorn", "--bind=0.0.0.0:5000", "--reuse-port", "main:app"]
 localPort = 5000
 externalPort = 80
 
-[[ports]]
-localPort = 43571
-externalPort = 3000
-
 [objectStorage]
 defaultBucketID = "replit-objstore-b5446f4f-041f-475a-817a-5bc695b0b196"
 
