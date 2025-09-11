@@ -43,7 +43,10 @@ import urllib.parse as up
 def get_db_connection():
     url = os.environ['DATABASE_URL']
     p = up.urlparse(url)
-    database_name = p.path[1:] if p.path and len(p.path) > 1 else 'neondb'
+    # Handle different database names for dev/production
+    database_name = p.path[1:] if p.path and len(p.path) > 1 else (
+        os.environ.get('PGDATABASE', 'neondb')
+    )
     
     return pg8000.connect(
         host=p.hostname,
