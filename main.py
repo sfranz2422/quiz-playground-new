@@ -2367,13 +2367,13 @@ def videoQuestions(teacherid, set, number):
             #go to a random game
             msg = "Correct!"
             # $HTTPRequest.request("https://quizplayground.com/recordAnswer/"+str(question["id"])+"/"+str(c)+"/"+str(i)+"/"+str(teacherCode)+"/"+question["quizid"]+"/"+str(title)+"/"+str(qt))
-            requests.get(f"https://quizplayground.replit.app/recordAnswer/{questionid}/1/0/{teacherid}/{set}/{questionsettitle}/{questiontext}")
+            requests.get(f"{request.host_url}recordAnswer/{questionid}/1/0/{teacherid}/{set}/{questionsettitle}/{questiontext}")
             # flash("Correct!")
             # return redirect(url_for('coinDash'))
         
         else:
             print("Sorry wrong choice")
-            requests.get(f"https://quizplayground.replit.app/recordAnswer/{questionid}/0/1/{teacherid}/{set}/{questionsettitle}/{questiontext}")
+            requests.get(f"{request.host_url}recordAnswer/{questionid}/0/1/{teacherid}/{set}/{questionsettitle}/{questiontext}")
 
             # flash("Sorry wrong choice")
             msg = "Incorrect!"

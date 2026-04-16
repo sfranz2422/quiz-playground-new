@@ -56,7 +56,7 @@
 
                          {% for quiz in result %}
                         <tr>
-                          <th scope="row"> <a class="link-danger text-decoration-none" href="{{ url_for('displayOneQuestionSet', id=quiz[0] ) }}">Add / Generate / Download</a></th>
+                          <th scope="row"> <a class="link-danger text-decoration-none" href="{{ url_for('displayOneQuestionSet', id=quiz[0] ) }}">Add / Download</a></th>
                           <td>{{ quiz[1] }}</td>
                           <td class="text-wrap">{{ quiz[2] }}</td>
 
