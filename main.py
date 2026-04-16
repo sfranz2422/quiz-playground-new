@@ -66,6 +66,8 @@ import pg8000
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['APP_SECRET']
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 
 
 openai.api_key = os.environ['OPEN_AI_KEY']
