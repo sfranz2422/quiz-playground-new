@@ -48,7 +48,7 @@ def get_db_connection():
         os.environ.get('PGDATABASE', 'neondb')
     )
     
-    return pg8000.connect(
+    conn = pg8000.connect(
         host=p.hostname,
         port=p.port or 5432,
         database=database_name,
@@ -56,6 +56,10 @@ def get_db_connection():
         password=p.password,
         ssl_context=True
     )
+    conn.autocommit = True
+
+    return conn
+    
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'csv'}
@@ -433,7 +437,6 @@ def upload_file():
                              f"{question['questionSetDescription']}",
                              f"{question['questionSetPrivate']}",
                              question['teacherId'],f"{question['subject']}"))
-
 
             try:
                 os.remove(f"uploads/{filename}")
