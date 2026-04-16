@@ -8,7 +8,7 @@ import json
 import os
 import random
 from pathlib import Path
-from replit.object_storage import Client
+# from replit.object_storage import Client
 import io
 import pathlib
 import hashlib
@@ -32,7 +32,7 @@ FILE_TO_DELETE = ""
 from twilio.rest import Client as TC
 # from mailersend import emails
 
-client = Client()
+# client = Client()
 # import pg80002.pool
 # pool = psycopg2.pool.SimpleConnectionPool(0, 80, os.environ['DATABASE_URL'])
 
@@ -177,17 +177,17 @@ def download_filev2():
     path = "quiz_playground_template.csv"
     return send_file(path, as_attachment=True)
 
-@app.route('/download')
-def download_file():
-    # client.download_as_text("quiz_playground_template.csv")
-    file_bytes = client.download_as_bytes("quiz_playground_template.csv")
-    mem = io.BytesIO()
-    mem.write(file_bytes)
-    mem.seek(0)
-    return send_file(mem,
-                     as_attachment=True,
-                     download_name="quiz_playground_template.csv")
-    # return redirect(url_for('upload'))
+# @app.route('/download')
+# def download_file():
+#     # client.download_as_text("quiz_playground_template.csv")
+#     file_bytes = client.download_as_bytes("quiz_playground_template.csv")
+#     mem = io.BytesIO()
+#     mem.write(file_bytes)
+#     mem.seek(0)
+#     return send_file(mem,
+#                      as_attachment=True,
+#                      download_name="quiz_playground_template.csv")
+#     # return redirect(url_for('upload'))
 
 
 def get_random_string():

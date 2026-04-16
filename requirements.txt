@@ -1,0 +1,12 @@
+flask
+gunicorn
+pg8000
+openai
+stripe
+twilio
+pytube
+youtube-transcript-api
+flask-sitemapper
+pillow
+requests
+werkzeug
