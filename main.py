@@ -1980,10 +1980,10 @@ def oneresult(quizid):
 )
 def recordAnswer(id, correct, incorrect, teacherId, quizid, quiztitle,
                  questiontext):
-    correct = int(correct)
-    questionId = int(id)
-    teacherId = int(teacherId)
-    incorrect = int(incorrect)
+    correct = int(float(correct))
+    questionId = int(float(id))
+    teacherId = int(float(teacherId))
+    incorrect = int(float(incorrect))
 
     # cur = getDatabaseConnection()
 
