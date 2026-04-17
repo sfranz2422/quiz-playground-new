@@ -470,7 +470,7 @@ def getQuestionSet(set):
     
 
 
-    return myresult
+    return jsonify(myresult)
 
 
 # @app.route('/game2')
