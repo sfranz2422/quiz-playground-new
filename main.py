@@ -327,7 +327,7 @@ def get_private_question_sets(teacherId):
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             # SQL = "SELECT DISTINCT quizId, questionSetTitle, questionSetDescription FROM complete_questions WHERE teacherId = %s ORDER BY questionSetTitle"
-            SQL = "SELECT DISTINCT ON (questionSetTitle, quizId) quizId, questionSetTitle, questionSetDescription, timestamp, youtubeurl, teacherid FROM complete_questions WHERE teacherId = %s ORDER BY questionSetTitle, quizId"
+            SQL = "SELECT DISTINCT ON (questionSetTitle, quizId) quizId, questionSetTitle, questionSetDescription, timestamp, youtubeurl, teacherid FROM complete_questions WHERE teacherId = %s ORDER BY timestamp DESC, quizId"
             data = (teacherId, )
 
             cur.execute(SQL, data)
