@@ -989,9 +989,9 @@ def register():
                 phone = r[0][8]
 
                 #send code
-                sendCode(phone)
-
-                return redirect(url_for('twofactor'))
+                # sendCode(phone)
+                return redirect(url_for('confirmationNoPay'))
+                # return redirect(url_for('twofactor'))
 
             else:
                 msg = "Error Creating Account"
@@ -1004,6 +1004,44 @@ def register():
     token = uuid.uuid4()
     session['token'] = token
     return render_template("register.html", token=token)
+
+
+        
+@app.route('/confirmationNoPay', methods=['GET'])
+def confirmationNoPay():
+    # print("checkout id")
+    # print(checkout_session_id)
+    
+    teacherId = session['id']
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            SQL = "SELECT * FROM users WHERE teacherid = %s"
+            data = (teacherId, )
+
+            cur.execute(SQL, data)
+            list = cur.fetchall()
+
+            # print("the db lookup")
+            # print(list)
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            SQL = "UPDATE users SET subscribed = %s WHERE teacherid = %s"
+            data = (
+                1,
+                teacherId,
+            )
+
+            cur.execute(SQL, data)
+
+    session['subscribed'] = True
+    session['loggedin'] = True
+
+    #turn subscribed on
+    # set session cookies
+    return redirect(url_for('account'))
+    
+
+
 
 
 def sendCode(phone):
